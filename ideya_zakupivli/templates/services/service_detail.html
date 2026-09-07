@@ -5,16 +5,14 @@
 >
   <div class="container">
     <p class="breadcrumbs">
-      <a href="{% url 'core:home' %}">Головна</a> / {% if service.audience ==
-      'zamovnykam' %}
-      <a href="{% url 'services:zamovnykam' %}"
-        >{{ service.get_audience_display }}</a
-      >
-      / {% else %}
-      <a href="{% url 'services:uchasnykam' %}"
-        >{{ service.get_audience_display }}</a
-      >
-      / {% endif %} {{ service.title }}
+      <a href="{% url 'core:home' %}">Головна</a> /
+      {% if service.audience == 'zamovnykam' %}
+      <a href="{% url 'services:zamovnykam' %}">{{ service.get_audience_display }}</a> /
+      {% endif %}
+      {% if service.audience == 'uchasnykam' %}
+      <a href="{% url 'services:uchasnykam' %}">{{ service.get_audience_display }}</a> /
+      {% endif %}
+      {{ service.title }}
     </p>
     <h1>
       <svg class="detail-icon" aria-hidden="true">
