@@ -77,14 +77,81 @@ python manage.py runserver
   адмінці, можна позначати опрацьованими.
 - **Підписники на розсилку** (форма у футері) — модель `NewsletterSubscriber`.
 
-## Що ще варто зробити перед продакшн-релізом
+## Публікація на PythonAnywhere
 
-- Замінити `SECRET_KEY` у `config/settings.py` і винести його в змінну середовища.
-- Виставити `DEBUG = False`, коректний `ALLOWED_HOSTS`.
-- Підключити реальну БД (PostgreSQL) замість SQLite.
-- Додати надсилання email/Telegram-сповіщення при новому `ConsultationRequest`
-  (зараз воно просто зберігається в базі й видно в адмінці).
-- Підключити реальну відправку листів для форми підписки, якщо потрібна email-розсилка
-  (Mailchimp/SendGrid тощо), зараз контакти просто зберігаються в базі.
-- Додати `django-environ` або `.env`-файл для конфігурації.
-- Зробити `collectstatic` і віддавати статику через nginx/WhiteNoise.
+Нижче наведено готовий варіант для безкоштовного або платного Django Web app.
+SQLite підходить для старту: файл бази залишайте в каталозі проєкту та регулярно
+робіть його резервну копію.
+
+### 1. Завантаження та virtualenv
+
+У Bash-консолі PythonAnywhere:
+
+```bash
+cd ~
+git clone YOUR_REPOSITORY_URL ideya_zakupivli
+cd ~/ideya_zakupivli
+python3.11 -m venv ~/.virtualenvs/ideya-zakupivli
+source ~/.virtualenvs/ideya-zakupivli/bin/activate
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py collectstatic --noinput
+python manage.py createsuperuser
+python manage.py seed_content
+```
+
+Якщо проєкт завантажується через вкладку **Files**, його каталог має бути
+`/home/ВАШ_USERNAME/ideya_zakupivli`, а `manage.py` має лежати безпосередньо
+в ньому.
+
+### 2. Web app та WSGI
+
+Створіть **Web app** з ручною конфігурацією для Python 3.11. У полі **Virtualenv**
+вкажіть `/home/ВАШ_USERNAME/.virtualenvs/ideya-zakupivli`.
+
+Відкрийте WSGI-файл, який покаже PythonAnywhere, і замініть його вміст на цей код,
+замінивши `ВАШ_USERNAME` та домен:
+
+```python
+import os
+import sys
+
+project_dir = '/home/ВАШ_USERNAME/ideya_zakupivli'
+if project_dir not in sys.path:
+    sys.path.insert(0, project_dir)
+
+os.environ['DJANGO_SETTINGS_MODULE'] = 'config.settings'
+os.environ['DJANGO_SECRET_KEY'] = 'вставте-довгий-випадковий-секрет'
+os.environ['DJANGO_DEBUG'] = 'False'
+os.environ['DJANGO_ALLOWED_HOSTS'] = 'ВАШ_USERNAME.pythonanywhere.com'
+os.environ['DJANGO_CSRF_TRUSTED_ORIGINS'] = 'https://ВАШ_USERNAME.pythonanywhere.com'
+
+from django.core.wsgi import get_wsgi_application
+
+application = get_wsgi_application()
+```
+
+### 3. Static files
+
+У вкладці **Web** додайте mappings:
+
+| URL | Directory |
+|---|---|
+| `/static/` | `/home/ВАШ_USERNAME/ideya_zakupivli/staticfiles` |
+| `/media/` | `/home/ВАШ_USERNAME/ideya_zakupivli/media` |
+
+Після змін натисніть **Reload**. Сайт буде доступний за адресою
+`https://ВАШ_USERNAME.pythonanywhere.com/`, адмінка — `/admin/`.
+
+Після кожного оновлення коду виконуйте:
+
+```bash
+cd ~/ideya_zakupivli
+source ~/.virtualenvs/ideya-zakupivli/bin/activate
+git pull
+python manage.py migrate
+python manage.py collectstatic --noinput
+```
+
+Секретний ключ не додавайте в git. Перед публікацією також заповніть контакти
+через `/admin/`; заявки з форми та підписники зберігатимуться у SQLite.
