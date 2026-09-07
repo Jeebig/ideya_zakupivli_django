@@ -1,0 +1,111 @@
+{% extends "base.html" %} {% block title %}Роз'яснення — ІдеЯ у закупівлях{% endblock %} {% block content %}
+<section class="page-header">
+  <div class="container">
+    <h1>Роз'яснення</h1>
+    <p class="page-header-sub">
+      Аналітичні матеріали за 4-кроковою структурою: коротка відповідь,
+      нормативна опора, алгоритм дій, формулювання.
+    </p>
+  </div>
+</section>
+
+<section class="catalog">
+  <div class="container catalog-grid">
+    <aside class="catalog-filters">
+      <form method="get" class="filters-form">
+        <label for="q">Пошук</label>
+        <input
+          type="text"
+          id="q"
+          name="q"
+          value="{{ query }}"
+          placeholder="Ключове слово"
+        />
+        <button type="submit" class="btn btn-secondary btn-sm search-submit">
+          Застосувати пошук
+        </button>
+
+        <label>Для кого</label>
+        <div class="filter-pills">
+          <a
+            data-filter-group="audience"
+            data-filter-value=""
+            href="?{% if current_tag %}tag={{ current_tag }}&{% endif %}"
+            class="pill {% if not current_audience %}pill-active{% endif %}"
+            >Усі</a
+          >
+          <a
+            data-filter-group="audience"
+            data-filter-value="zamovnykam"
+            href="?audience=zamovnykam{% if current_tag %}&tag={{ current_tag }}{% endif %}"
+            class="pill {% if current_audience == 'zamovnykam' %}pill-active{% endif %}"
+            >Замовникам</a
+          >
+          <a
+            data-filter-group="audience"
+            data-filter-value="uchasnykam"
+            href="?audience=uchasnykam{% if current_tag %}&tag={{ current_tag }}{% endif %}"
+            class="pill {% if current_audience == 'uchasnykam' %}pill-active{% endif %}"
+            >Учасникам</a
+          >
+        </div>
+
+        <label>Тема</label>
+        <div class="filter-pills filter-pills-vertical">
+          <a
+            data-filter-group="tag"
+            data-filter-value=""
+            href="?{% if current_audience %}audience={{ current_audience }}{% endif %}"
+            class="pill {% if not current_tag %}pill-active{% endif %}"
+            >Усі теми</a
+          >
+          {% for tag in tags %}
+          <a
+            data-filter-group="tag"
+            data-filter-value="{{ tag.slug }}"
+            href="?tag={{ tag.slug }}{% if current_audience %}&audience={{ current_audience }}{% endif %}"
+            class="pill {% if current_tag == tag.slug %}pill-active{% endif %}"
+            >{{ tag.name }}</a
+          >
+          {% endfor %}
+        </div>
+      </form>
+    </aside>
+
+    <div class="catalog-results">
+      <div class="cards-grid">
+        {% for article in articles %}
+        <a href="{{ article.get_absolute_url }}" class="content-card">
+          <span class="content-card-tag"
+            >{{ article.get_audience_display }}</span
+          >
+          <h3>{{ article.title }}</h3>
+          <p>
+            {{ article.summary|default:article.short_answer|truncatewords:20 }}
+          </p>
+        </a>
+        {% empty %}
+        <p>Нічого не знайдено. Спробуйте змінити фільтри.</p>
+        {% endfor %}
+      </div>
+
+      {% if is_paginated %}
+      <div class="pagination">
+        {% if page_obj.has_previous %}<a
+          href="?page={{ page_obj.previous_page_number }}"
+          >← Попередні</a
+        >{% endif %}
+        <span
+          >Сторінка {{ page_obj.number }} з {{ page_obj.paginator.num_pages
+          }}</span
+        >
+        {% if page_obj.has_next %}<a
+          href="?page={{ page_obj.next_page_number }}"
+          >Наступні →</a
+        >{% endif %}
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+{% endblock %}

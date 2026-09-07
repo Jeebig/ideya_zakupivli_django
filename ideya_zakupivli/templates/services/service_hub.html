@@ -1,0 +1,79 @@
+{% extends "base.html" %} {% load static %} {% block title %}{{ audience_label
+}} — ІдеЯ у закупівлях{% endblock %} {% block content %}
+<section
+  class="page-header {% if audience == 'zamovnykam' %}page-header-blue{% else %}page-header-yellow{% endif %}"
+>
+  <div class="container">
+    <h1>{{ audience_label }}</h1>
+    <p class="page-header-sub">
+      {% if audience == 'zamovnykam' %} Документація, протоколи, договори та
+      супровід закупівлі — без ризику подальших скарг. {% else %} Перевірка
+      документації, підготовка пропозиції, захист позиції в АМКУ. {% endif %}
+    </p>
+  </div>
+</section>
+
+<section class="services-list">
+  <div class="container">
+    <div
+      class="section-head"
+      style="
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+      "
+    >
+      <h2 class="section-title">Послуги — {{ audience_label }}</h2>
+      <a href="{% url 'consultations:contacts' %}" class="btn btn-cta"
+        >Отримати консультацію</a
+      >
+    </div>
+
+    <div class="services-table" role="list">
+      {% for service in services %}
+      <a
+        class="service-row"
+        role="listitem"
+        href="{{ service.get_absolute_url }}"
+      >
+        <div class="service-title">{{ service.title }}</div>
+        <div class="service-desc">
+          {{ service.short_description|default:"—" }}
+        </div>
+        <div class="service-meta">{{ service.get_audience_display }}</div>
+        <div class="service-action">
+          <span class="btn btn-secondary">Деталі →</span>
+        </div>
+      </a>
+      {% empty %}
+      <div class="service-row">
+        <div class="service-desc">Послуги цього розділу скоро з'являться.</div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="digest">
+  <div class="container">
+    <div class="section-head">
+      <h2 class="section-title">Роз'яснення по темі «{{ audience_label }}»</h2>
+      <a
+        href="{% url 'content:article_list' %}?audience={{ audience }}"
+        class="link-more"
+        >Усі роз'яснення →</a
+      >
+    </div>
+  </div>
+</section>
+
+<section class="cta-final">
+  <div class="container cta-final-inner">
+    <h2>Потрібен супровід закупівлі?</h2>
+    <a href="{% url 'consultations:contacts' %}" class="btn btn-cta btn-lg"
+      >Отримати консультацію</a
+    >
+  </div>
+</section>
+{% endblock %}

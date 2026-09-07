@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Контакти — ІдеЯ у закупівлях{% endblock %}
+
+{% block content %}
+<section class="page-header">
+  <div class="container">
+    <h1>Контакти</h1>
+    <p class="page-header-sub">{{ site_settings.consultation_format_note }}</p>
+  </div>
+</section>
+
+<section class="contacts-section">
+  <div class="container contacts-grid">
+    <div class="contacts-info">
+      <h2>Як зв'язатись</h2>
+      {% if site_settings.phone %}<p class="contact-line">📞 {{ site_settings.phone }}</p>{% endif %}
+      {% if site_settings.email %}<p class="contact-line">✉️ <a href="mailto:{{ site_settings.email }}">{{ site_settings.email }}</a></p>{% endif %}
+      {% if site_settings.telegram %}<p class="contact-line">💬 <a href="{{ site_settings.telegram }}">Telegram</a></p>{% endif %}
+      {% if site_settings.viber %}<p class="contact-line">💬 <a href="{{ site_settings.viber }}">Viber</a></p>{% endif %}
+      <div class="sla-box">
+        <strong>{{ site_settings.response_sla }}</strong>
+        <p>Типові питання вже мають відповіді в розділах «Роз'яснення» та «Питання та відповіді» —
+        перевірте, можливо відповідь уже готова і безкоштовна.</p>
+      </div>
+    </div>
+
+    <form method="post" class="consultation-form">
+      {% csrf_token %}
+      <h2>Опишіть вашу ситуацію</h2>
+      {% for field in form %}
+      <div class="form-row {% if field.field.widget.input_type == 'checkbox' %}form-row-checkbox{% endif %}">
+        {% if field.field.widget.input_type == 'checkbox' %}
+          <label class="checkbox-label">{{ field }} {{ field.label }}</label>
+        {% else %}
+          <label for="{{ field.id_for_label }}">{{ field.label }}{% if field.field.required %} *{% endif %}</label>
+          {{ field }}
+        {% endif %}
+        {% if field.errors %}<p class="field-error">{{ field.errors|striptags }}</p>{% endif %}
+      </div>
+      {% endfor %}
+      <button type="submit" class="btn btn-cta btn-lg">Надіслати запит</button>
+    </form>
+  </div>
+</section>
+{% endblock %}

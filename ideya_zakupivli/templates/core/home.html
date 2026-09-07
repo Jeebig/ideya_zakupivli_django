@@ -1,0 +1,184 @@
+{% extends "base.html" %} {% block title %}ІдеЯ у закупівлях — консультації для
+замовників і учасників{% endblock %} {% block content %}
+<section class="hero">
+  <div class="container hero-inner">
+    <p class="hero-eyebrow">Спокійно.</p>
+    <h1 class="hero-title">ІдеЯ <span>є</span>.</h1>
+    <p class="hero-subtitle">
+      Коли тендерна документація незрозуміла, АМКУ чекає пояснення, а до
+      дедлайну 24 години — тут ви отримаєте чітку відповідь, а не купу
+      канцеляризмів.
+    </p>
+    <a href="{% url 'consultations:contacts' %}" class="btn btn-cta btn-lg"
+      >Отримати консультацію</a
+    >
+  </div>
+</section>
+
+<section class="audience-split">
+  <div class="container audience-grid">
+    <a
+      href="{% url 'services:zamovnykam' %}"
+      class="audience-card audience-card-blue"
+    >
+      <h2>Я — замовник</h2>
+      <p>
+        Тендерна документація, протоколи УО, договори, моніторинг ДАСУ, супровід
+        закупівлі.
+      </p>
+      <span class="card-arrow">Перейти до розділу →</span>
+    </a>
+    <a
+      href="{% url 'services:uchasnykam' %}"
+      class="audience-card audience-card-yellow"
+    >
+      <h2>Я — учасник</h2>
+      <p>
+        Перевірка документації, підготовка пропозиції, оскарження в АМКУ, аналіз
+        відхилення.
+      </p>
+      <span class="card-arrow">Перейти до розділу →</span>
+    </a>
+  </div>
+</section>
+
+<section class="situations">
+  <div class="container">
+    <h2 class="section-title">Знайома ситуація?</h2>
+    <div class="situations-grid">
+      <div class="situation-card">
+        <h3>АМКУ очікує пояснення</h3>
+        <p>
+          Скарга подана, термін тисне, а формулювання відповіді вирішує все.
+        </p>
+      </div>
+      <div class="situation-card">
+        <h3>Учасник зробив помилку</h3>
+        <p>Незрозуміло, чи це підстава для відхилення, чи можна виправити.</p>
+      </div>
+      <div class="situation-card">
+        <h3>Знову зміни до правил</h3>
+        <p>
+          Законодавство оновилось — і треба швидко зрозуміти, що це змінює саме
+          для вас.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% if latest_clarifications %}
+<section class="digest">
+  <div class="container">
+    <div class="section-head">
+      <h2 class="section-title">Останні роз'яснення</h2>
+      <a href="{% url 'content:article_list' %}" class="link-more"
+        >Усі роз'яснення →</a
+      >
+    </div>
+    <div class="cards-grid">
+      {% for article in latest_clarifications %}
+      <a href="{{ article.get_absolute_url }}" class="content-card">
+        <span class="content-card-tag">{{ article.get_audience_display }}</span>
+        <h3>{{ article.title }}</h3>
+        <p>
+          {{ article.summary|default:article.short_answer|truncatewords:20 }}
+        </p>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %} {% if latest_news %}
+<section class="digest digest-news">
+  <div class="container">
+    <div class="section-head">
+      <h2 class="section-title">Останні новини</h2>
+      <a href="{% url 'content:news_list' %}" class="link-more">Усі новини →</a>
+    </div>
+    <div class="cards-grid cards-grid-3">
+      {% for article in latest_news %}
+      <a
+        href="{{ article.get_absolute_url }}"
+        class="content-card content-card-news"
+      >
+        <span class="content-card-date"
+          >{{ article.published_at|date:"d.m.Y" }}</span
+        >
+        <h3>{{ article.title }}</h3>
+        <p>{{ article.summary|truncatewords:18 }}</p>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<section class="method">
+  <div class="container">
+    <h2 class="section-title">Як формується відповідь</h2>
+    <div class="method-steps">
+      <div class="method-step">
+        <span class="step-num">1</span>
+        <h3>Коротка відповідь</h3>
+        <p>Суть — без води, одразу по темі.</p>
+      </div>
+      <div class="method-step">
+        <span class="step-num">2</span>
+        <h3>Нормативна опора</h3>
+        <p>На що саме спираємось — стаття, пункт, постанова.</p>
+      </div>
+      <div class="method-step">
+        <span class="step-num">3</span>
+        <h3>Алгоритм дій</h3>
+        <p>Що робити крок за кроком.</p>
+      </div>
+      <div class="method-step">
+        <span class="step-num">4</span>
+        <h3>Робоче формулювання</h3>
+        <p>Готовий текст, який можна використати.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% if popular_faq %}
+<section class="faq-teaser">
+  <div class="container">
+    <div class="section-head">
+      <h2 class="section-title">Популярні питання</h2>
+      <a href="{% url 'content:faq_list' %}?popular=1" class="link-more"
+        >Усі популярні питання →</a
+      >
+    </div>
+    <div class="faq-teaser-list">
+      {% for item in popular_faq %}
+      <details class="faq-teaser-item">
+        <summary>{{ item.question }}</summary>
+        <div class="faq-teaser-answer">
+          <p>{{ item.answer|linebreaks }}</p>
+          {% if item.related_article %}
+          <a
+            href="{{ item.related_article.get_absolute_url }}"
+            class="link-more"
+            >Детальніше в роз'ясненні →</a
+          >
+          {% endif %}
+        </div>
+      </details>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<section class="cta-final">
+  <div class="container cta-final-inner">
+    <h2>Потрібна відповідь по вашій ситуації?</h2>
+    <p>Опишіть ситуацію — отримаєте письмову консультацію по суті.</p>
+    <a href="{% url 'consultations:contacts' %}" class="btn btn-cta btn-lg"
+      >Отримати консультацію</a
+    >
+  </div>
+</section>
+{% endblock %}

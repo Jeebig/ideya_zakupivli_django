@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}Дякуємо — ІдеЯ у закупівлях{% endblock %}
+
+{% block content %}
+<section class="page-header thanks-page">
+  <div class="container">
+    <h1>Дякуємо за звернення!</h1>
+    <p class="page-header-sub">{{ site_settings.response_sla }}. Відповідь буде надіслана письмово на вказаний контакт.</p>
+    <a href="{% url 'core:home' %}" class="btn btn-secondary">На головну</a>
+  </div>
+</section>
+{% endblock %}

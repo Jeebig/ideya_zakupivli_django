@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Новини — ІдеЯ у закупівлях{% endblock %}
+
+{% block content %}
+<section class="page-header page-header-yellow">
+  <div class="container">
+    <h1>Новини</h1>
+    <p class="page-header-sub">Коротко про зміни в законодавстві — що саме змінилось і коли. За розгорнутим алгоритмом дій — дивіться «Роз'яснення».</p>
+  </div>
+</section>
+
+<section class="catalog">
+  <div class="container catalog-grid">
+    <aside class="catalog-filters">
+      <label>Тема</label>
+      <div class="filter-pills filter-pills-vertical">
+        <a href="?" class="pill {% if not current_tag %}pill-active{% endif %}">Усі теми</a>
+        {% for tag in tags %}
+        <a href="?tag={{ tag.slug }}" class="pill {% if current_tag == tag.slug %}pill-active{% endif %}">{{ tag.name }}</a>
+        {% endfor %}
+      </div>
+    </aside>
+
+    <div class="catalog-results">
+      <div class="cards-grid cards-grid-3">
+        {% for article in articles %}
+        <a href="{{ article.get_absolute_url }}" class="content-card content-card-news">
+          <span class="content-card-date">{{ article.published_at|date:"d.m.Y" }}</span>
+          <h3>{{ article.title }}</h3>
+          <p>{{ article.summary|truncatewords:18 }}</p>
+        </a>
+        {% empty %}
+        <p>Новин поки немає.</p>
+        {% endfor %}
+      </div>
+      {% if is_paginated %}
+      <div class="pagination">
+        {% if page_obj.has_previous %}<a href="?page={{ page_obj.previous_page_number }}">← Попередні</a>{% endif %}
+        <span>Сторінка {{ page_obj.number }} з {{ page_obj.paginator.num_pages }}</span>
+        {% if page_obj.has_next %}<a href="?page={{ page_obj.next_page_number }}">Наступні →</a>{% endif %}
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<section class="digest">
+  <div class="container" style="text-align:center;">
+    <p>Не пропускайте зміни — підпишіться на розсилку у футері сторінки.</p>
+  </div>
+</section>
+{% endblock %}

@@ -1,0 +1,36 @@
+from django.contrib import admin
+from .models import Tag, Article, FAQItem
+
+
+@admin.register(Tag)
+class TagAdmin(admin.ModelAdmin):
+    list_display = ('name', 'slug', 'order')
+    prepopulated_fields = {'slug': ('name',)}
+    ordering = ('order', 'name')
+
+
+@admin.register(Article)
+class ArticleAdmin(admin.ModelAdmin):
+    list_display = ('title', 'article_type', 'audience', 'is_published', 'is_featured', 'published_at')
+    list_filter = ('article_type', 'audience', 'is_published', 'is_featured', 'tags')
+    search_fields = ('title', 'summary', 'body', 'short_answer')
+    prepopulated_fields = {'slug': ('title',)}
+    filter_horizontal = ('tags',)
+    fieldsets = (
+        (None, {'fields': ('article_type', 'title', 'slug', 'audience', 'tags', 'summary')}),
+        ("Структура роз'яснення (4 кроки)", {
+            'fields': ('short_answer', 'legal_basis', 'action_algorithm', 'wording'),
+            'classes': ('collapse',),
+        }),
+        ('Текст новини', {'fields': ('body',), 'classes': ('collapse',)}),
+        ('Публікація', {'fields': ('is_published', 'is_featured')}),
+    )
+
+
+@admin.register(FAQItem)
+class FAQItemAdmin(admin.ModelAdmin):
+    list_display = ('question', 'audience', 'is_popular', 'order')
+    list_filter = ('audience', 'is_popular', 'tags')
+    search_fields = ('question', 'answer')
+    filter_horizontal = ('tags',)
+    ordering = ('order',)

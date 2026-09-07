@@ -1,0 +1,94 @@
+{% extends "base.html" %} {% load static %} {% block title %}{{ service.title }}
+— ІдеЯ у закупівлях{% endblock %} {% block content %}
+<section
+  class="page-header {% if service.audience == 'zamovnykam' %}page-header-blue{% else %}page-header-yellow{% endif %}"
+>
+  <div class="container">
+    <p class="breadcrumbs">
+      <a href="{% url 'core:home' %}">Головна</a> / {% if service.audience == 'zamovnykam' %}
+      <a href="{% url 'services:zamovnykam' %}"
+        >{{ service.get_audience_display }}</a
+      >
+      / {% else %}
+      <a href="{% url 'services:uchasnykam' %}"
+        >{{ service.get_audience_display }}</a
+      >
+      / {% endif %} {{ service.title }}
+    </p>
+    <h1>
+      <svg class="detail-icon" aria-hidden="true">
+        <use href="{% static 'icons/sprite.svg' %}#icon-briefcase"></use>
+      </svg>
+      {{ service.title }}
+    </h1>
+    <div class="service-head-meta" style="margin-top:8px;">
+      <span class="service-head-item">Аудиторія: {{ service.get_audience_display }}</span>
+      {% if service.price %}<span class="service-head-item">Ціна: {{ service.price }}</span>{% endif %}
+      {% if service.duration %}<span class="service-head-item">Термін: {{ service.duration }}</span>{% endif %}
+    </div>
+    {% if service.short_description %}
+    <p class="page-header-sub">{{ service.short_description }}</p>
+    {% endif %}
+  </div>
+</section>
+
+<section class="service-detail">
+  <div class="container service-detail-grid">
+    <div class="service-detail-main">
+      {% if service.included_list %}
+      <div class="detail-block">
+        <h2>Що входить у послугу</h2>
+        <ul class="check-list">
+          {% for item in service.included_list %}
+          <li>{{ item }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endif %} {% if service.risks_list %}
+      <div class="detail-block detail-block-warning">
+        <h2>Типові помилки / ризики</h2>
+        <ul class="warning-list">
+          {% for item in service.risks_list %}
+          <li>{{ item }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endif %} {% if related_articles %}
+      <div class="detail-block">
+        <h2>Пов'язані роз'яснення</h2>
+        <ul class="link-list">
+          {% for a in related_articles %}
+          <li><a href="{{ a.get_absolute_url }}">{{ a.title }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endif %} {% if related_faq %}
+      <div class="detail-block">
+        <h2>Пов'язані питання</h2>
+        <ul class="link-list">
+          {% for f in related_faq %}
+          <li>
+            <a href="{% url 'content:faq_list' %}#faq-{{ f.pk }}"
+              >{{ f.question }}</a
+            >
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
+    </div>
+
+    <aside class="service-detail-sidebar">
+      <div class="sidebar-cta">
+        <h3>Потрібна ця послуга?</h3>
+        <p>{{ site_settings.consultation_format_note }}</p>
+        <a
+          href="{% url 'consultations:contacts' %}?topic={{ service.title|urlencode }}"
+          class="btn btn-cta"
+          >Замовити консультацію</a
+        >
+      </div>
+    </aside>
+  </div>
+</section>
+{% endblock %}

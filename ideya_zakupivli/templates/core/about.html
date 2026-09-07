@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}Про мене — ІдеЯ у закупівлях{% endblock %}
+
+{% block content %}
+<section class="page-header">
+  <div class="container">
+    <h1>Про мене</h1>
+    {% if site_settings.experience_years %}<p class="page-header-sub">Досвід: {{ site_settings.experience_years }}</p>{% endif %}
+  </div>
+</section>
+
+<section class="about-intro">
+  <div class="container">
+    {% if site_settings.about_intro %}
+      <p>{{ site_settings.about_intro|linebreaks }}</p>
+    {% else %}
+      <p>Працюю з публічними закупівлями: допомагаю замовникам готувати документацію без ризику
+      подальших скарг, а учасникам — правильно готувати пропозиції та захищати свою позицію.
+      Без канцеляризмів, простою мовою, з опорою на практику.</p>
+    {% endif %}
+  </div>
+</section>
+
+{% if cases %}
+<section class="cases">
+  <div class="container">
+    <h2 class="section-title">Приклади розв'язаних задач</h2>
+    <div class="cases-grid">
+      {% for case in cases %}
+      <div class="case-card">
+        <h3>{{ case.title }}</h3>
+        <p><strong>Ситуація:</strong> {{ case.situation }}</p>
+        <p><strong>Дія:</strong> {{ case.action }}</p>
+        <p><strong>Результат:</strong> {{ case.result }}</p>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<section class="cta-final">
+  <div class="container cta-final-inner">
+    <h2>Готові обговорити вашу ситуацію?</h2>
+    <a href="{% url 'consultations:contacts' %}" class="btn btn-cta btn-lg">Отримати консультацію</a>
+  </div>
+</section>
+{% endblock %}

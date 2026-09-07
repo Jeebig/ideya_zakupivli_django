@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+  <symbol id="icon-briefcase" viewBox="0 0 24 24">
+    <path d="M10 2h4a2 2 0 0 1 2 2v2h3a1 1 0 0 1 1 1v11a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V7a1 1 0 0 1 1-1h3V4a2 2 0 0 1 2-2h2zM4 8v10h16V8H4zm6-4v2h4V4h-4z"/>
+  </symbol>
+  <symbol id="icon-arrow-right" viewBox="0 0 24 24">
+    <path d="M12 4l1.41 1.41L8.83 10H20v2H8.83l4.58 4.59L12 18l-8-8 8-8z"/>
+  </symbol>
+  <symbol id="icon-search" viewBox="0 0 24 24">
+    <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79L20 21.5 21.5 20l-6-6zM10 14a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"/>
+  </symbol>
+  <symbol id="icon-faq" viewBox="0 0 24 24">
+    <path d="M12 2a10 10 0 1 0 .001 20.001A10 10 0 0 0 12 2zm1 15h-2v-2h2v2zm1.07-7.75-.9.92A1.5 1.5 0 0 0 12.5 12H11v-1c0-1.1.9-2 2-2 .55 0 1.05.22 1.41.59.36.36.59.86.59 1.41 0 .28-.07.55-.17.79z"/>
+  </symbol>
+</svg>

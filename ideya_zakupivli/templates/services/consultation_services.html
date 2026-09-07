@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Послуги та консультації — ІдеЯ у закупівлях{% endblock %}
+
+{% block content %}
+<section class="page-header">
+  <div class="container">
+    <h1>Послуги та консультації</h1>
+    <p class="page-header-sub">{{ site_settings.consultation_format_note }}</p>
+  </div>
+</section>
+
+<section class="services-list">
+  <div class="container">
+    <h2 class="section-title">Разова допомога</h2>
+    <div class="services-grid">
+      {% for s in one_time %}
+      <div class="service-card service-card-static">
+        <h3>{{ s.title }}</h3>
+        {% if s.description %}<p>{{ s.description }}</p>{% endif %}
+        <p class="price-note">{{ s.format_note }}</p>
+        <a href="{% url 'consultations:contacts' %}?topic={{ s.title|urlencode }}" class="btn btn-secondary">Дізнатись вартість</a>
+      </div>
+      {% empty %}
+      <p>Наповніть цей блок через адмін-панель (модель ConsultationService).</p>
+      {% endfor %}
+    </div>
+
+    <h2 class="section-title" style="margin-top:48px;">Постійний супровід</h2>
+    <div class="services-grid">
+      {% for s in ongoing %}
+      <div class="service-card service-card-static">
+        <h3>{{ s.title }}</h3>
+        {% if s.description %}<p>{{ s.description }}</p>{% endif %}
+        <p class="price-note">{{ s.format_note }}</p>
+        <a href="{% url 'consultations:contacts' %}?topic={{ s.title|urlencode }}" class="btn btn-secondary">Дізнатись вартість</a>
+      </div>
+      {% empty %}
+      <p>Наповніть цей блок через адмін-панель.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="cta-final">
+  <div class="container cta-final-inner">
+    <h2>Не знаєте, яка послуга підходить?</h2>
+    <p>Опишіть ситуацію — підкажемо формат і орієнтовну вартість.</p>
+    <a href="{% url 'consultations:contacts' %}" class="btn btn-cta btn-lg">Окремий запит вартості</a>
+  </div>
+</section>
+{% endblock %}
