@@ -5,8 +5,7 @@
 >
   <div class="container">
     <p class="breadcrumbs">
-      <a href="{% url 'core:home' %}">Головна</a> / {% if service.audience ==
-      'zamovnykam' %}
+      <a href="{% url 'core:home' %}">Головна</a> / {% if service.audience == 'zamovnykam' %}
       <a href="{% url 'services:zamovnykam' %}"
         >{{ service.get_audience_display }}</a
       >
