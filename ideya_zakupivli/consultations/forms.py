@@ -3,6 +3,8 @@ from .models import ConsultationRequest
 
 
 class ConsultationRequestForm(forms.ModelForm):
+    name = forms.CharField(min_length=2, max_length=150)
+
     class Meta:
         model = ConsultationRequest
         fields = ['name', 'contact', 'topic', 'tender_link', 'message', 'consent']
@@ -22,3 +24,9 @@ class ConsultationRequestForm(forms.ModelForm):
         if not consent:
             raise forms.ValidationError('Потрібна згода на обробку персональних даних.')
         return consent
+
+    def clean_message(self):
+        message = self.cleaned_data.get('message', '').strip()
+        if len(message) < 10:
+            raise forms.ValidationError('Опишіть ситуацію щонайменше у 10 символах.')
+        return message

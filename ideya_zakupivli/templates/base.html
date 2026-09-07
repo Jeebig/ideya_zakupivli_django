@@ -1,106 +1,153 @@
 {% load static %}<!doctype html>
 <html lang="uk">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{% block title %}ІдеЯ у закупівлях{% endblock %}</title>
-  <meta name="description" content="{% block meta_description %}Консультації, роз'яснення та супровід закупівель для замовників і учасників.{% endblock %}">
-  <link rel="stylesheet" href="{% static 'css/style.css' %}">
-</head>
-<body>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{% block title %}ІдеЯ у закупівлях{% endblock %}</title>
+    <meta
+      name="description"
+      content="{% block meta_description %}Консультації, роз'яснення та супровід закупівель для замовників і учасників.{% endblock %}"
+    />
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a href="{% url 'core:home' %}" class="logo"
+          >ІдеЯ<span class="logo-dot">.</span
+          ><span class="logo-sub">у закупівлях</span></a
+        >
 
-<header class="site-header">
-  <div class="container header-inner">
-    <a href="{% url 'core:home' %}" class="logo">ІдеЯ<span class="logo-dot">.</span><span class="logo-sub">у закупівлях</span></a>
+        <button
+          class="nav-toggle"
+          id="navToggle"
+          aria-label="Відкрити меню"
+          aria-expanded="false"
+          aria-controls="mainNav"
+        >
+          <span></span><span></span><span></span>
+        </button>
 
-    <button class="nav-toggle" id="navToggle" aria-label="Меню">
-      <span></span><span></span><span></span>
-    </button>
-
-    <nav class="main-nav" id="mainNav">
-      <ul>
-        <li class="has-dropdown">
-          <a href="{% url 'services:zamovnykam' %}">Замовникам</a>
-          <ul class="dropdown">
-            {% for s in nav_customer_services %}
-            <li><a href="{{ s.get_absolute_url }}">{{ s.title }}</a></li>
-            {% endfor %}
-            <li class="dropdown-all"><a href="{% url 'services:zamovnykam' %}">Усі послуги →</a></li>
+        <nav class="main-nav" id="mainNav">
+          <ul>
+            <li class="has-dropdown">
+              <a href="{% url 'services:zamovnykam' %}">Замовникам</a>
+              <ul class="dropdown">
+                {% for s in nav_customer_services %}
+                <li><a href="{{ s.get_absolute_url }}">{{ s.title }}</a></li>
+                {% endfor %}
+                <li class="dropdown-all">
+                  <a href="{% url 'services:zamovnykam' %}">Усі послуги →</a>
+                </li>
+              </ul>
+            </li>
+            <li class="has-dropdown">
+              <a href="{% url 'services:uchasnykam' %}">Учасникам</a>
+              <ul class="dropdown">
+                {% for s in nav_participant_services %}
+                <li><a href="{{ s.get_absolute_url }}">{{ s.title }}</a></li>
+                {% endfor %}
+                <li class="dropdown-all">
+                  <a href="{% url 'services:uchasnykam' %}">Усі послуги →</a>
+                </li>
+              </ul>
+            </li>
+            <li><a href="{% url 'content:article_list' %}">Роз'яснення</a></li>
+            <li><a href="{% url 'content:news_list' %}">Новини</a></li>
+            <li>
+              <a href="{% url 'content:faq_list' %}">Питання та відповіді</a>
+            </li>
+            <li><a href="{% url 'services:poslugy' %}">Послуги</a></li>
+            <li><a href="{% url 'core:about' %}">Про мене</a></li>
+            <li><a href="{% url 'consultations:contacts' %}">Контакти</a></li>
           </ul>
-        </li>
-        <li class="has-dropdown">
-          <a href="{% url 'services:uchasnykam' %}">Учасникам</a>
-          <ul class="dropdown">
-            {% for s in nav_participant_services %}
-            <li><a href="{{ s.get_absolute_url }}">{{ s.title }}</a></li>
-            {% endfor %}
-            <li class="dropdown-all"><a href="{% url 'services:uchasnykam' %}">Усі послуги →</a></li>
+        </nav>
+
+        <a href="{% url 'consultations:contacts' %}" class="btn btn-cta"
+          >Отримати консультацію</a
+        >
+      </div>
+    </header>
+
+    {% if messages %}
+    <div class="container">
+      {% for message in messages %}
+      <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <main>{% block content %}{% endblock %}</main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div class="footer-col">
+          <a href="{% url 'core:home' %}" class="logo logo-footer"
+            >ІдеЯ<span class="logo-dot">.</span></a
+          >
+          <p class="footer-text">
+            Консультації та супровід закупівель — просто, письмово, по суті.
+          </p>
+        </div>
+        <div class="footer-col">
+          <h3>Розділи</h3>
+          <ul class="footer-links">
+            <li><a href="{% url 'services:zamovnykam' %}">Замовникам</a></li>
+            <li><a href="{% url 'services:uchasnykam' %}">Учасникам</a></li>
+            <li><a href="{% url 'content:article_list' %}">Роз'яснення</a></li>
+            <li>
+              <a href="{% url 'content:faq_list' %}">Питання та відповіді</a>
+            </li>
           </ul>
-        </li>
-        <li><a href="{% url 'content:article_list' %}">Роз'яснення</a></li>
-        <li><a href="{% url 'content:news_list' %}">Новини</a></li>
-        <li><a href="{% url 'content:faq_list' %}">Питання та відповіді</a></li>
-        <li><a href="{% url 'services:poslugy' %}">Послуги</a></li>
-        <li><a href="{% url 'core:about' %}">Про мене</a></li>
-        <li><a href="{% url 'consultations:contacts' %}">Контакти</a></li>
-      </ul>
-    </nav>
+        </div>
+        <div class="footer-col">
+          <h3>Контакти</h3>
+          {% if site_settings.phone %}
+          <p>{{ site_settings.phone }}</p>
+          {% endif %} {% if site_settings.email %}
+          <p>
+            <a href="mailto:{{ site_settings.email }}"
+              >{{ site_settings.email }}</a
+            >
+          </p>
+          {% endif %}
+          <p>
+            {% if site_settings.telegram %}<a
+              href="{{ site_settings.telegram }}"
+              >Telegram</a
+            >{% endif %} {% if site_settings.telegram and site_settings.viber %}
+            · {% endif %} {% if site_settings.viber %}<a
+              href="{{ site_settings.viber }}"
+              >Viber</a
+            >{% endif %}
+          </p>
+        </div>
+        <div class="footer-col">
+          <h3>Не пропустіть зміни</h3>
+          <p class="footer-text">
+            Коротка стрічка новин про зміни в закупівлях — прямо в Telegram чи
+            на email.
+          </p>
+          <form
+            method="post"
+            action="{% url 'core:subscribe' %}"
+            class="subscribe-form"
+          >
+            {% csrf_token %}
+            <input
+              type="text"
+              name="contact"
+              placeholder="Email або Telegram"
+              required
+            />
+            <button type="submit" class="btn btn-secondary">Підписатись</button>
+          </form>
+        </div>
+      </div>
+      <p class="copyright">© {% now "Y" %} ІдеЯ у закупівлях</p>
+    </footer>
 
-    <a href="{% url 'consultations:contacts' %}" class="btn btn-cta">Отримати консультацію</a>
-  </div>
-</header>
-
-{% if messages %}
-<div class="container">
-  {% for message in messages %}
-  <div class="alert alert-{{ message.tags }}">{{ message }}</div>
-  {% endfor %}
-</div>
-{% endif %}
-
-<main>
-  {% block content %}{% endblock %}
-</main>
-
-<footer class="site-footer">
-  <div class="container footer-inner">
-    <div class="footer-col">
-      <a href="{% url 'core:home' %}" class="logo logo-footer">ІдеЯ<span class="logo-dot">.</span></a>
-      <p class="footer-text">Консультації та супровід закупівель — просто, письмово, по суті.</p>
-    </div>
-    <div class="footer-col">
-      <h3>Розділи</h3>
-      <ul class="footer-links">
-        <li><a href="{% url 'services:zamovnykam' %}">Замовникам</a></li>
-        <li><a href="{% url 'services:uchasnykam' %}">Учасникам</a></li>
-        <li><a href="{% url 'content:article_list' %}">Роз'яснення</a></li>
-        <li><a href="{% url 'content:faq_list' %}">Питання та відповіді</a></li>
-      </ul>
-    </div>
-    <div class="footer-col">
-      <h3>Контакти</h3>
-      {% if site_settings.phone %}<p>{{ site_settings.phone }}</p>{% endif %}
-      {% if site_settings.email %}<p><a href="mailto:{{ site_settings.email }}">{{ site_settings.email }}</a></p>{% endif %}
-      <p>
-        {% if site_settings.telegram %}<a href="{{ site_settings.telegram }}">Telegram</a>{% endif %}
-        {% if site_settings.telegram and site_settings.viber %} · {% endif %}
-        {% if site_settings.viber %}<a href="{{ site_settings.viber }}">Viber</a>{% endif %}
-      </p>
-    </div>
-    <div class="footer-col">
-      <h3>Не пропустіть зміни</h3>
-      <p class="footer-text">Коротка стрічка новин про зміни в закупівлях — прямо в Telegram чи на email.</p>
-      <form method="post" action="{% url 'core:subscribe' %}" class="subscribe-form">
-        {% csrf_token %}
-        <input type="text" name="contact" placeholder="Email або Telegram" required>
-        <button type="submit" class="btn btn-secondary">Підписатись</button>
-      </form>
-    </div>
-  </div>
-  <p class="copyright">© {% now "Y" %} ІдеЯ у закупівлях</p>
-</footer>
-
-<script src="{% static 'js/main.js' %}"></script>
-{% block extra_js %}{% endblock %}
-</body>
+    <script src="{% static 'js/main.js' %}"></script>
+    {% block extra_js %}{% endblock %}
+  </body>
 </html>

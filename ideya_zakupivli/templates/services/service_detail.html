@@ -5,7 +5,8 @@
 >
   <div class="container">
     <p class="breadcrumbs">
-      <a href="{% url 'core:home' %}">Головна</a> / {% if service.audience == 'zamovnykam' %}
+      <a href="{% url 'core:home' %}">Головна</a> / {% if service.audience ==
+      'zamovnykam' %}
       <a href="{% url 'services:zamovnykam' %}"
         >{{ service.get_audience_display }}</a
       >
@@ -21,10 +22,15 @@
       </svg>
       {{ service.title }}
     </h1>
-    <div class="service-head-meta" style="margin-top:8px;">
-      <span class="service-head-item">Аудиторія: {{ service.get_audience_display }}</span>
-      {% if service.price %}<span class="service-head-item">Ціна: {{ service.price }}</span>{% endif %}
-      {% if service.duration %}<span class="service-head-item">Термін: {{ service.duration }}</span>{% endif %}
+    <div class="service-head-meta service-head-meta-spaced">
+      <span class="service-head-item"
+        >Аудиторія: {{ service.get_audience_display }}</span
+      >
+      {% if service.price %}<span class="service-head-item"
+        >Ціна: {{ service.price }}</span
+      >{% endif %} {% if service.duration %}<span class="service-head-item"
+        >Термін: {{ service.duration }}</span
+      >{% endif %}
     </div>
     {% if service.short_description %}
     <p class="page-header-sub">{{ service.short_description }}</p>

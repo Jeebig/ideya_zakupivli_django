@@ -3,12 +3,17 @@ document.addEventListener("DOMContentLoaded", function () {
   var nav = document.getElementById("mainNav");
   if (toggle && nav) {
     toggle.addEventListener("click", function () {
-      nav.classList.toggle("open");
+      var isOpen = nav.classList.toggle("open");
+      toggle.setAttribute("aria-expanded", String(isOpen));
+      toggle.setAttribute(
+        "aria-label",
+        isOpen ? "Закрити меню" : "Відкрити меню",
+      );
     });
   }
 
   // На мобільних mega-menu відкривається по кліку, а не по hover
-  if (window.innerWidth <= 640) {
+  if (!window.matchMedia("(hover: hover)").matches) {
     document.querySelectorAll(".has-dropdown > a").forEach(function (link) {
       link.addEventListener("click", function (e) {
         var parent = link.parentElement;
@@ -28,7 +33,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 // Enhanced desktop behavior: hover-delay for dropdowns + header hide-on-scroll
 (function () {
-  var desktopBreakpoint = 640;
   var closeTimers = new WeakMap();
 
   function initDropdowns() {
@@ -140,7 +144,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   }
 
-  if (window.innerWidth > desktopBreakpoint) {
+  if (window.matchMedia("(hover: hover)").matches) {
     document.addEventListener("DOMContentLoaded", function () {
       initDropdowns();
       initHeaderScroll();

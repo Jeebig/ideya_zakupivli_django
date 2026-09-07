@@ -1,14 +1,22 @@
-{% extends "base.html" %}
-{% block title %}{{ article.title }} — ІдеЯ у закупівлях{% endblock %}
-
-{% block content %}
+{% extends "base.html" %} {% block title %}{{ article.title }} — ІдеЯ у
+закупівлях{% endblock %} {% block meta_description %}{{
+article.summary|default:article.title }}{% endblock %} {% block content %}
 <section class="page-header page-header-blue">
   <div class="container">
-    <p class="breadcrumbs"><a href="{% url 'core:home' %}">Головна</a> / <a href="{% url 'content:article_list' %}">Роз'яснення</a> / {{ article.title }}</p>
+    <p class="breadcrumbs">
+      <a href="{% url 'core:home' %}">Головна</a> /
+      <a href="{% url 'content:article_list' %}">Роз'яснення</a> / {{
+      article.title }}
+    </p>
     <h1>{{ article.title }}</h1>
-    <p class="page-header-meta">Оновлено: {{ article.updated_at|date:"d.m.Y" }} · {{ article.get_audience_display }}</p>
+    <p class="page-header-meta">
+      Оновлено: {{ article.updated_at|date:"d.m.Y" }} · {{
+      article.get_audience_display }}
+    </p>
     <div class="tag-row">
-      {% for tag in article.tags.all %}<span class="tag-chip">{{ tag.name }}</span>{% endfor %}
+      {% for tag in article.tags.all %}<span class="tag-chip"
+        >{{ tag.name }}</span
+      >{% endfor %}
     </div>
   </div>
 </section>
@@ -21,29 +29,23 @@
         <h2>Коротка відповідь</h2>
         <p>{{ article.short_answer|linebreaks }}</p>
       </div>
-      {% endif %}
-      {% if article.legal_basis %}
+      {% endif %} {% if article.legal_basis %}
       <div class="answer-block answer-block-2">
         <h2>Нормативна опора</h2>
         <p>{{ article.legal_basis|linebreaks }}</p>
       </div>
-      {% endif %}
-      {% if article.action_algorithm %}
+      {% endif %} {% if article.action_algorithm %}
       <div class="answer-block answer-block-3">
         <h2>Алгоритм дій</h2>
         <p>{{ article.action_algorithm|linebreaks }}</p>
       </div>
-      {% endif %}
-      {% if article.wording %}
+      {% endif %} {% if article.wording %}
       <div class="answer-block answer-block-4">
         <h2>Робоче формулювання</h2>
         <p>{{ article.wording|linebreaks }}</p>
       </div>
-      {% endif %}
-      {% if article.body %}
-      <div class="answer-block">
-        {{ article.body|linebreaks }}
-      </div>
+      {% endif %} {% if article.body %}
+      <div class="answer-block">{{ article.body|linebreaks }}</div>
       {% endif %}
     </article>
 
@@ -52,21 +54,32 @@
       <div class="sidebar-block">
         <h3>Пов'язані питання</h3>
         <ul class="link-list">
-          {% for f in related_faq %}<li><a href="{% url 'content:faq_list' %}#faq-{{ f.pk }}">{{ f.question }}</a></li>{% endfor %}
+          {% for f in related_faq %}
+          <li>
+            <a href="{% url 'content:faq_list' %}#faq-{{ f.pk }}"
+              >{{ f.question }}</a
+            >
+          </li>
+          {% endfor %}
         </ul>
       </div>
-      {% endif %}
-      {% if related_articles %}
+      {% endif %} {% if related_articles %}
       <div class="sidebar-block">
         <h3>Схожі роз'яснення</h3>
         <ul class="link-list">
-          {% for a in related_articles %}<li><a href="{{ a.get_absolute_url }}">{{ a.title }}</a></li>{% endfor %}
+          {% for a in related_articles %}
+          <li><a href="{{ a.get_absolute_url }}">{{ a.title }}</a></li>
+          {% endfor %}
         </ul>
       </div>
       {% endif %}
       <div class="sidebar-cta">
         <h3>Потрібна персональна консультація по цій темі?</h3>
-        <a href="{% url 'consultations:contacts' %}?topic={{ article.title|urlencode }}" class="btn btn-cta">Замовити консультацію</a>
+        <a
+          href="{% url 'consultations:contacts' %}?topic={{ article.title|urlencode }}"
+          class="btn btn-cta"
+          >Замовити консультацію</a
+        >
       </div>
     </aside>
   </div>

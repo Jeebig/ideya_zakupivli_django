@@ -1,5 +1,7 @@
 from django.shortcuts import get_object_or_404
 from django.views.generic import TemplateView, DetailView, ListView
+from django.utils import timezone
+from content.models import Article, FAQItem
 from .models import Service, ConsultationService
 
 
@@ -28,9 +30,9 @@ class ServiceDetailView(DetailView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         service = self.object
-        from content.models import Article, FAQItem
         ctx['related_articles'] = Article.objects.filter(
-            article_type=Article.CLARIFICATION, tags__in=service.tags.all(), is_published=True,
+            article_type=Article.CLARIFICATION, tags__in=service.tags.all(),
+            is_published=True, published_at__lte=timezone.now(),
         ).distinct()[:4]
         ctx['related_faq'] = FAQItem.objects.filter(tags__in=service.tags.all()).distinct()[:4]
         return ctx

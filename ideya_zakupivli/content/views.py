@@ -1,6 +1,7 @@
 from django.views.generic import ListView, DetailView
 from .models import Article, Tag, FAQItem
 from django.db.models import Q
+from django.utils import timezone
 
 
 class ArticleListView(ListView):
@@ -11,7 +12,10 @@ class ArticleListView(ListView):
     paginate_by = 9
 
     def get_queryset(self):
-        qs = Article.objects.filter(article_type=Article.CLARIFICATION, is_published=True)
+        qs = Article.objects.filter(
+            article_type=Article.CLARIFICATION, is_published=True,
+            published_at__lte=timezone.now(),
+        )
         tag_slug = self.request.GET.get('tag')
         audience = self.request.GET.get('audience')
         query = self.request.GET.get('q')
@@ -48,14 +52,18 @@ class ArticleDetailView(DetailView):
     slug_field = 'slug'
 
     def get_queryset(self):
-        return Article.objects.filter(article_type=Article.CLARIFICATION, is_published=True)
+        return Article.objects.filter(
+            article_type=Article.CLARIFICATION, is_published=True,
+            published_at__lte=timezone.now(),
+        )
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         article = self.object
         ctx['related_faq'] = FAQItem.objects.filter(tags__in=article.tags.all()).distinct()[:5]
         ctx['related_articles'] = Article.objects.filter(
-            article_type=Article.CLARIFICATION, tags__in=article.tags.all(), is_published=True,
+            article_type=Article.CLARIFICATION, tags__in=article.tags.all(),
+            is_published=True, published_at__lte=timezone.now(),
         ).exclude(pk=article.pk).distinct()[:4]
         return ctx
 
@@ -68,7 +76,10 @@ class NewsListView(ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        qs = Article.objects.filter(article_type=Article.NEWS, is_published=True)
+        qs = Article.objects.filter(
+            article_type=Article.NEWS, is_published=True,
+            published_at__lte=timezone.now(),
+        )
         tag_slug = self.request.GET.get('tag')
         query = self.request.GET.get('q')
         if tag_slug:
@@ -91,13 +102,17 @@ class NewsDetailView(DetailView):
     context_object_name = 'article'
 
     def get_queryset(self):
-        return Article.objects.filter(article_type=Article.NEWS, is_published=True)
+        return Article.objects.filter(
+            article_type=Article.NEWS, is_published=True,
+            published_at__lte=timezone.now(),
+        )
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         article = self.object
         ctx['related_clarifications'] = Article.objects.filter(
-            article_type=Article.CLARIFICATION, tags__in=article.tags.all(), is_published=True,
+            article_type=Article.CLARIFICATION, tags__in=article.tags.all(),
+            is_published=True, published_at__lte=timezone.now(),
         ).distinct()[:4]
         return ctx
 

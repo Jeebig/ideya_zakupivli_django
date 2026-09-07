@@ -13,6 +13,8 @@ class TagAdmin(admin.ModelAdmin):
 class ArticleAdmin(admin.ModelAdmin):
     list_display = ('title', 'article_type', 'audience', 'is_published', 'is_featured', 'published_at')
     list_filter = ('article_type', 'audience', 'is_published', 'is_featured', 'tags')
+    date_hierarchy = 'published_at'
+    list_per_page = 25
     search_fields = ('title', 'summary', 'body', 'short_answer')
     prepopulated_fields = {'slug': ('title',)}
     filter_horizontal = ('tags',)
@@ -23,8 +25,9 @@ class ArticleAdmin(admin.ModelAdmin):
             'classes': ('collapse',),
         }),
         ('Текст новини', {'fields': ('body',), 'classes': ('collapse',)}),
-        ('Публікація', {'fields': ('is_published', 'is_featured')}),
+        ('Публікація', {'fields': ('is_published', 'is_featured', 'published_at', 'updated_at')}),
     )
+    readonly_fields = ('updated_at',)
 
 
 @admin.register(FAQItem)

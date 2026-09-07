@@ -7,6 +7,7 @@ from content.models import Article, FAQItem
 from .models import CaseStudy
 from .forms import SubscribeForm
 from django.utils.http import url_has_allowed_host_and_scheme
+from django.utils import timezone
 
 
 class HomeView(TemplateView):
@@ -16,12 +17,20 @@ class HomeView(TemplateView):
         ctx = super().get_context_data(**kwargs)
         featured = Article.objects.filter(
             article_type=Article.CLARIFICATION, is_published=True, is_featured=True,
+            published_at__lte=timezone.now(),
         )
         ctx['latest_clarifications'] = (
             featured[:4] if featured.exists()
-            else Article.objects.filter(article_type=Article.CLARIFICATION, is_published=True)[:4]
+            else Article.objects.filter(
+                article_type=Article.CLARIFICATION,
+                is_published=True,
+                published_at__lte=timezone.now(),
+            )[:4]
         )
-        ctx['latest_news'] = Article.objects.filter(article_type=Article.NEWS, is_published=True)[:3]
+        ctx['latest_news'] = Article.objects.filter(
+            article_type=Article.NEWS, is_published=True,
+            published_at__lte=timezone.now(),
+        )[:3]
         ctx['popular_faq'] = FAQItem.objects.filter(is_popular=True)[:5]
         return ctx
 
@@ -35,14 +44,14 @@ class AboutView(TemplateView):
         return ctx
 
 
+@require_POST
 def subscribe(request):
-    if request.method == 'POST':
-        form = SubscribeForm(request.POST)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Дякуємо! Ви підписані на оновлення.')
-        else:
-            messages.error(request, 'Перевірте, будь ласка, введені дані.')
+    form = SubscribeForm(request.POST)
+    if form.is_valid():
+        form.save()
+        messages.success(request, 'Дякуємо! Ви підписані на оновлення.')
+    else:
+        messages.error(request, 'Перевірте, будь ласка, введені дані.')
     # Безпечний редірект: дозволяємо лише внутрішні шляхи або fallback на home
     referer = request.META.get('HTTP_REFERER')
     if referer and url_has_allowed_host_and_scheme(

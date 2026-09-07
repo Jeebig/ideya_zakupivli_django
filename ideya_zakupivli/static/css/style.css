@@ -243,6 +243,11 @@ a:hover {
   background: var(--text-main);
   margin: 5px 0;
 }
+a:focus-visible,
+button:focus-visible {
+  outline: 3px solid var(--amber-500);
+  outline-offset: 3px;
+}
 
 /* ---------- Messages ---------- */
 .alert {
@@ -393,6 +398,21 @@ a:hover {
   justify-content: space-between;
   align-items: baseline;
   margin-bottom: 20px;
+}
+.section-head-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.section-title-spaced {
+  margin-top: 48px;
+}
+.service-head-meta-spaced {
+  margin-top: 8px;
+}
+.digest-inner {
+  text-align: center;
 }
 .link-more {
   font-weight: 700;
@@ -1146,6 +1166,15 @@ section {
   }
   .service-card h2 {
     font-size: 1.02rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
   }
 }
 

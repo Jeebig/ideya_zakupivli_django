@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.urls import reverse
 from django.utils.text import slugify
@@ -55,9 +56,9 @@ class Article(models.Model):
     # Для новин достатньо простого тексту
     body = models.TextField('Текст новини / додатковий текст', blank=True)
 
-    is_published = models.BooleanField('Опубліковано', default=True)
+    is_published = models.BooleanField('Опубліковано', default=False)
     is_featured = models.BooleanField('Показувати в дайджесті на Головній', default=False)
-    published_at = models.DateTimeField('Дата публікації', auto_now_add=True)
+    published_at = models.DateTimeField('Дата публікації', null=True, blank=True)
     updated_at = models.DateTimeField('Дата оновлення', auto_now=True)
 
     class Meta:
@@ -99,3 +100,10 @@ class FAQItem(models.Model):
 
     def __str__(self):
         return self.question
+
+    def clean(self):
+        super().clean()
+        if self.related_article and self.related_article.article_type != Article.CLARIFICATION:
+            raise ValidationError({
+                'related_article': 'Можна прив’язувати лише роз’яснення.',
+            })
