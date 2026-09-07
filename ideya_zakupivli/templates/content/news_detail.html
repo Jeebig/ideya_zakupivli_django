@@ -1,7 +1,6 @@
-{% extends "base.html" %}
-{% block title %}{{ article.title }} — Новини{% endblock %}
-{% block meta_description %}{{ article.summary|default:article.title }}{% endblock %}
-{% block content %}
+{% extends "base.html" %} {% block title %}{{ article.title }} — Новини{%
+endblock %} {% block meta_description %}{{ article.summary|default:article.title
+}}{% endblock %} {% block content %}
 <section class="page-header page-header-yellow">
   <div class="container">
     <p class="breadcrumbs">
