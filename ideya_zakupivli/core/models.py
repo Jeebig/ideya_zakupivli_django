@@ -2,7 +2,7 @@ from django.db import models
 
 
 class CaseStudy(models.Model):
-    """Знеособлений кейс для сторінки 'Про мене'."""
+    """Знеособлений кейс для сторінки «Команда ІдеЯ»."""
     title = models.CharField('Заголовок кейсу', max_length=255)
     situation = models.TextField('Ситуація')
     action = models.TextField('Дія')
@@ -12,7 +12,7 @@ class CaseStudy(models.Model):
     class Meta:
         ordering = ['order']
         verbose_name = 'Кейс'
-        verbose_name_plural = 'Кейси (Про мене)'
+        verbose_name_plural = 'Кейси (Команда ІдеЯ)'
 
     def __str__(self):
         return self.title
@@ -36,7 +36,7 @@ class SiteSettings(models.Model):
             'ситуації — платна, вартість уточнюється після опису ситуації.'
         ),
     )
-    about_intro = models.TextField('Вступний текст "Про мене"', blank=True)
+    about_intro = models.TextField('Вступний текст «Команда ІдеЯ»', blank=True)
     experience_years = models.CharField('Досвід (наприклад "7+ років")', max_length=100, blank=True)
     expert_name = models.CharField('Ім’я та прізвище експерта', max_length=255, blank=True)
     expert_specialization = models.CharField('Спеціалізація', max_length=255, blank=True)
