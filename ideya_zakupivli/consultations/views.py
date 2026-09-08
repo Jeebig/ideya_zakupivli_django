@@ -1,6 +1,7 @@
 from django.views.generic import FormView, TemplateView
 from django.urls import reverse_lazy
 from .forms import ConsultationRequestForm
+from .models import ConsultationAttachment
 
 
 class ContactsView(FormView):
@@ -16,7 +17,9 @@ class ContactsView(FormView):
         return initial
 
     def form_valid(self, form):
-        form.save()
+        request_obj = form.save()
+        for uploaded in form.cleaned_data.get('attachments', []):
+            ConsultationAttachment.objects.create(request=request_obj, file=uploaded)
         return super().form_valid(form)
 
 

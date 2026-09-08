@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import ConsultationRequest
+from .models import ConsultationRequest, ConsultationAttachment
 
 
 @admin.register(ConsultationRequest)

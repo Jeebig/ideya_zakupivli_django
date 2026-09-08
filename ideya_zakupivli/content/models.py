@@ -50,8 +50,16 @@ class Article(models.Model):
     # Структура "Роз'яснення": 4 кроки
     short_answer = models.TextField('Коротка відповідь', blank=True)
     legal_basis = models.TextField('Нормативна опора', blank=True)
+    legal_basis_reference = models.CharField('Пункт і номер нормативного акта', max_length=500, blank=True)
+    source_url = models.URLField('Посилання на першоджерело', blank=True)
+    current_as_of = models.DateField('Актуально станом на', null=True, blank=True)
+    exceptions_risks = models.TextField('Винятки та ризики', blank=True)
     action_algorithm = models.TextField('Алгоритм дій', blank=True)
     wording = models.TextField('Робоче формулювання', blank=True)
+    author = models.CharField('Автор / експерт', max_length=255, blank=True)
+    related_articles = models.ManyToManyField(
+        'self', blank=True, symmetrical=False, related_name='related_to', verbose_name='Пов’язані матеріали'
+    )
 
     # Для новин достатньо простого тексту
     body = models.TextField('Текст новини / додатковий текст', blank=True)
@@ -107,3 +115,29 @@ class FAQItem(models.Model):
             raise ValidationError({
                 'related_article': 'Можна прив’язувати лише роз’яснення.',
             })
+
+
+class OfficialExplanation(models.Model):
+    """Посилання на офіційні документи Мінекономіки без копіювання файлів."""
+    document_date = models.DateField('Дата документа')
+    document_number = models.CharField('Номер документа', max_length=120)
+    title = models.CharField('Офіційна назва', max_length=500)
+    summary = models.TextField('Короткий опис')
+    tags = models.ManyToManyField(Tag, blank=True, related_name='official_explanations', verbose_name='Теми')
+    source_page_url = models.URLField('Посилання на картку документа')
+    source_file_url = models.URLField('Пряме посилання на файл')
+    checked_at = models.DateTimeField('Остання перевірка посилання', auto_now=True)
+    is_current = models.BooleanField('Актуальне', default=True)
+    practical_comment = models.ForeignKey(
+        Article, blank=True, null=True, on_delete=models.SET_NULL,
+        limit_choices_to={'article_type': Article.CLARIFICATION},
+        related_name='official_sources', verbose_name='Практичний коментар ІдеЯ',
+    )
+
+    class Meta:
+        ordering = ['-document_date', '-id']
+        verbose_name = 'Офіційне роз’яснення Мінекономіки'
+        verbose_name_plural = 'Офіційні роз’яснення Мінекономіки'
+
+    def __str__(self):
+        return f'{self.document_number} — {self.title}'

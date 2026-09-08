@@ -12,6 +12,18 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
+  document.querySelectorAll("[data-copy-target]").forEach(function (button) {
+    button.addEventListener("click", function () {
+      var target = document.getElementById(button.dataset.copyTarget);
+      if (!target) return;
+      navigator.clipboard.writeText(target.value || target.textContent).then(function () {
+        var original = button.textContent;
+        button.textContent = "Скопійовано";
+        setTimeout(function () { button.textContent = original; }, 1600);
+      });
+    });
+  });
+
   // На мобільних mega-menu відкривається по кліку, а не по hover
   if (!window.matchMedia("(hover: hover)").matches) {
     document.querySelectorAll(".has-dropdown > a").forEach(function (link) {

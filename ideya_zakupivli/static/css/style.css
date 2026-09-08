@@ -31,13 +31,11 @@
 
   /* Typography */
   --font-heading: "PT Serif", Georgia, "Times New Roman", serif;
-  --font-body:
-    system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial,
-    sans-serif;
-  --h1-size: 28px;
-  --h2-size: 20px;
-  --h3-size: 16px;
-  --lead-size: 15px;
+  --font-body: "Trebuchet MS", "Segoe UI", sans-serif;
+  --h1-size: 34px;
+  --h2-size: 23px;
+  --h3-size: 18px;
+  --lead-size: 17px;
   --shadow-dropdown: 0 6px 18px rgba(16, 35, 61, 0.08);
   --amber-700: #7a5f16;
   --amber-600: #8f721e;
@@ -80,10 +78,11 @@ p {
 }
 a {
   color: var(--blue-600);
-  text-decoration: underline;
+  text-decoration: none;
 }
 a:hover {
   color: var(--blue-600-dark);
+  text-decoration: underline;
 }
 
 .container {
@@ -119,6 +118,27 @@ a:hover {
   color: var(--blue-600);
   border-color: var(--border-soft);
 }
+.btn-accent {
+  background: var(--amber-400);
+  color: var(--blue-900);
+  border-color: var(--amber-400);
+}
+.btn-accent:hover {
+  background: var(--white);
+  border-color: var(--white);
+  color: var(--blue-900);
+  text-decoration: none;
+}
+.btn-outline-light {
+  color: var(--white);
+  border-color: rgba(255, 255, 255, 0.55);
+  background: transparent;
+}
+.btn-outline-light:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--white);
+  text-decoration: none;
+}
 .btn-lg {
   padding: 12px 22px;
   font-size: 1.05rem;
@@ -140,10 +160,10 @@ a:hover {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 24px;
-  padding-top: 14px;
-  padding-bottom: 14px;
-  flex-wrap: wrap;
+  gap: 16px;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  flex-wrap: nowrap;
 }
 .logo {
   font-size: 1.25rem;
@@ -157,8 +177,11 @@ a:hover {
 .logo-dot {
   color: var(--amber-400);
 }
+.logo-accent {
+  color: var(--amber-400);
+}
 .logo-sub {
-  font-size: 0.78rem;
+  font-size: 0.9rem;
   font-weight: 400;
   color: var(--blue-300);
 }
@@ -169,7 +192,7 @@ a:hover {
   gap: 2px;
   margin: 0;
   padding: 0;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 .main-nav > ul > li {
   position: relative;
@@ -298,7 +321,59 @@ button:focus-visible {
   color: var(--blue-100);
   max-width: 640px;
   margin: 0 0 26px;
+  font-size: 1.15rem;
+}
+.hero-search {
+  max-width: 680px;
+  margin: 28px auto 0;
+  text-align: left;
+}
+.hero-search input {
+  width: 100%;
+  border: 0;
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  font: inherit;
   font-size: 1.05rem;
+}
+.hero-search p {
+  color: var(--blue-300);
+  font-size: 0.92rem;
+  margin: 8px 0 16px;
+}
+.hero-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.article-actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 18px;
+}
+.article-byline {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  margin-top: 24px;
+}
+.answer-block-risk {
+  border-left-color: var(--amber-500);
+}
+.official-source {
+  color: var(--text-muted);
+  font-size: 0.88rem;
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 @media (min-width: 720px) {
   .hero,
@@ -1069,6 +1144,7 @@ section {
 }
 .logo-footer {
   margin-bottom: 10px;
+  color: var(--white);
 }
 .subscribe-form {
   display: flex;
@@ -1093,7 +1169,33 @@ section {
 }
 
 /* ---------- Responsive ---------- */
-@media (max-width: 960px) {
+@media (max-width: 1090px) {
+  .nav-toggle {
+    display: block;
+    margin-left: auto;
+  }
+  .main-nav {
+    display: none;
+    width: 100%;
+    order: 4;
+  }
+  .main-nav.open {
+    display: block;
+  }
+  .main-nav ul {
+    flex-direction: column;
+  }
+  .header-inner {
+    flex-wrap: wrap;
+  }
+  .has-dropdown .dropdown {
+    position: static;
+    box-shadow: none;
+    display: none;
+  }
+  .has-dropdown.open .dropdown {
+    display: block;
+  }
   .audience-grid,
   .services-grid,
   .situations-grid,
@@ -1119,27 +1221,6 @@ section {
   }
 }
 @media (max-width: 640px) {
-  .nav-toggle {
-    display: block;
-  }
-  .main-nav {
-    display: none;
-    width: 100%;
-  }
-  .main-nav.open {
-    display: block;
-  }
-  .main-nav ul {
-    flex-direction: column;
-  }
-  .has-dropdown .dropdown {
-    position: static;
-    box-shadow: none;
-    display: none;
-  }
-  .has-dropdown.open .dropdown {
-    display: block;
-  }
   .cards-grid,
   .cards-grid-3 {
     grid-template-columns: 1fr;

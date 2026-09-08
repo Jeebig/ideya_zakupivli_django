@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Tag, Article, FAQItem
+from .models import Tag, Article, FAQItem, OfficialExplanation
 
 
 @admin.register(Tag)
@@ -21,7 +21,7 @@ class ArticleAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {'fields': ('article_type', 'title', 'slug', 'audience', 'tags', 'summary')}),
         ("Структура роз'яснення (4 кроки)", {
-            'fields': ('short_answer', 'legal_basis', 'action_algorithm', 'wording'),
+            'fields': ('short_answer', 'legal_basis', 'legal_basis_reference', 'source_url', 'current_as_of', 'exceptions_risks', 'action_algorithm', 'wording', 'author', 'related_articles'),
             'classes': ('collapse',),
         }),
         ('Текст новини', {'fields': ('body',), 'classes': ('collapse',)}),
@@ -37,3 +37,11 @@ class FAQItemAdmin(admin.ModelAdmin):
     search_fields = ('question', 'answer')
     filter_horizontal = ('tags',)
     ordering = ('order',)
+
+
+@admin.register(OfficialExplanation)
+class OfficialExplanationAdmin(admin.ModelAdmin):
+    list_display = ('document_date', 'document_number', 'title', 'is_current', 'checked_at')
+    list_filter = ('is_current', 'tags')
+    search_fields = ('title', 'document_number', 'summary')
+    filter_horizontal = ('tags',)

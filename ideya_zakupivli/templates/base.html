@@ -14,7 +14,7 @@
     <header class="site-header">
       <div class="container header-inner">
         <a href="{% url 'core:home' %}" class="logo"
-          >ІдеЯ<span class="logo-dot">.</span
+          >Іде<span class="logo-accent">Я</span><span class="logo-dot">.</span
           ><span class="logo-sub">у закупівлях</span></a
         >
 
@@ -52,19 +52,22 @@
                 </li>
               </ul>
             </li>
-            <li><a href="{% url 'content:article_list' %}">Роз'яснення</a></li>
-            <li><a href="{% url 'content:news_list' %}">Новини</a></li>
-            <li>
-              <a href="{% url 'content:faq_list' %}">Питання та відповіді</a>
+            <li class="has-dropdown">
+              <a href="{% url 'content:article_list' %}">База знань</a>
+              <ul class="dropdown">
+                <li><a href="{% url 'content:article_list' %}">Роз'яснення</a></li>
+                <li><a href="{% url 'content:faq_list' %}">FAQ</a></li>
+                <li><a href="{% url 'content:news_list' %}">Новини</a></li>
+                <li><a href="{% url 'content:official_list' %}">Офіційні роз’яснення</a></li>
+              </ul>
             </li>
             <li><a href="{% url 'services:poslugy' %}">Послуги</a></li>
-            <li><a href="{% url 'core:about' %}">Про мене</a></li>
-            <li><a href="{% url 'consultations:contacts' %}">Контакти</a></li>
+            <li><a href="{% url 'core:about' %}">Про експерта</a></li>
           </ul>
         </nav>
 
         <a href="{% url 'consultations:contacts' %}" class="btn btn-cta"
-          >Отримати консультацію</a
+          >Описати ситуацію</a
         >
       </div>
     </header>
@@ -83,7 +86,8 @@
       <div class="container footer-inner">
         <div class="footer-col">
           <a href="{% url 'core:home' %}" class="logo logo-footer"
-            >ІдеЯ<span class="logo-dot">.</span></a
+            >Іде<span class="logo-accent">Я</span><span class="logo-dot">.</span
+            ><span class="logo-sub">у закупівлях</span></a
           >
           <p class="footer-text">
             Консультації та супровід закупівель — просто, письмово, по суті.
@@ -94,10 +98,7 @@
           <ul class="footer-links">
             <li><a href="{% url 'services:zamovnykam' %}">Замовникам</a></li>
             <li><a href="{% url 'services:uchasnykam' %}">Учасникам</a></li>
-            <li><a href="{% url 'content:article_list' %}">Роз'яснення</a></li>
-            <li>
-              <a href="{% url 'content:faq_list' %}">Питання та відповіді</a>
-            </li>
+            <li><a href="{% url 'content:article_list' %}">База знань</a></li>
           </ul>
         </div>
         <div class="footer-col">
@@ -134,12 +135,7 @@
             class="subscribe-form"
           >
             {% csrf_token %}
-            <input
-              type="text"
-              name="contact"
-              placeholder="Email або Telegram"
-              required
-            />
+            <input type="email" name="contact" placeholder="Email" required />
             <button type="submit" class="btn btn-secondary">Підписатись</button>
           </form>
         </div>

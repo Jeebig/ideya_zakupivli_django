@@ -11,9 +11,9 @@
     </p>
     <h1>{{ article.title }}</h1>
     <p class="page-header-meta">
-      Оновлено: {{ article.updated_at|date:"d.m.Y" }} · {{
-      article.get_audience_display }}
+      Опубліковано: {{ article.published_at|date:"d.m.Y" }} · Оновлено: {{ article.updated_at|date:"d.m.Y" }} · {{ article.get_audience_display }}
     </p>
+    {% if article.current_as_of %}<p class="page-header-meta"><strong>Актуально станом на {{ article.current_as_of|date:"d.m.Y" }}</strong></p>{% endif %}
     <div class="tag-row">
       {% for tag in article.tags.all %}<span class="tag-chip"
         >{{ tag.name }}</span
@@ -34,6 +34,8 @@
       <div class="answer-block answer-block-2">
         <h2>Нормативна опора</h2>
         <p>{{ article.legal_basis|linebreaks }}</p>
+        {% if article.legal_basis_reference %}<p><strong>{{ article.legal_basis_reference }}</strong></p>{% endif %}
+        {% if article.source_url %}<a href="{{ article.source_url }}" target="_blank" rel="noopener">Переглянути першоджерело</a>{% endif %}
       </div>
       {% endif %} {% if article.action_algorithm %}
       <div class="answer-block answer-block-3">
@@ -48,6 +50,9 @@
       {% endif %} {% if article.body %}
       <div class="answer-block">{{ article.body|linebreaks }}</div>
       {% endif %}
+      {% if article.exceptions_risks %}<div class="answer-block answer-block-risk"><h2>Винятки та ризики</h2><p>{{ article.exceptions_risks|linebreaks }}</p></div>{% endif %}
+      {% if article.wording %}<div class="article-actions"><button class="btn btn-cta" type="button" data-copy-target="wording">Скопіювати формулювання</button><button class="btn btn-secondary" type="button" onclick="window.print()">Роздрукувати / PDF</button></div><textarea id="wording" class="sr-only">{{ article.wording }}</textarea>{% endif %}
+      {% if article.author %}<p class="article-byline">Автор / експерт: {{ article.author }}</p>{% endif %}
     </article>
 
     <aside class="article-sidebar">

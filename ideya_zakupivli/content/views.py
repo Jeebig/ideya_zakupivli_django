@@ -1,5 +1,5 @@
 from django.views.generic import ListView, DetailView
-from .models import Article, Tag, FAQItem
+from .models import Article, Tag, FAQItem, OfficialExplanation
 from django.db.models import Q
 from django.utils import timezone
 
@@ -140,4 +140,36 @@ class FAQListView(ListView):
         ctx['tags'] = Tag.objects.filter(faq_items__isnull=False).distinct()
         ctx['current_tag'] = self.request.GET.get('tag', '')
         ctx['current_audience'] = self.request.GET.get('audience', '')
+        return ctx
+
+
+class OfficialExplanationListView(ListView):
+    model = OfficialExplanation
+    template_name = 'content/official_list.html'
+    context_object_name = 'official_documents'
+    paginate_by = 12
+
+    def get_queryset(self):
+        qs = OfficialExplanation.objects.all().prefetch_related('tags', 'practical_comment')
+        query = self.request.GET.get('q', '').strip()
+        tag = self.request.GET.get('tag')
+        year = self.request.GET.get('year')
+        month = self.request.GET.get('month')
+        current = self.request.GET.get('current')
+        if query:
+            qs = qs.filter(title__icontains=query) | qs.filter(document_number__icontains=query) | qs.filter(summary__icontains=query)
+        if tag:
+            qs = qs.filter(tags__slug=tag)
+        if year and year.isdigit():
+            qs = qs.filter(document_date__year=int(year))
+        if month and month.isdigit():
+            qs = qs.filter(document_date__month=int(month))
+        if current == '1':
+            qs = qs.filter(is_current=True)
+        return qs.distinct()
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['tags'] = Tag.objects.filter(official_explanations__isnull=False).distinct()
+        ctx['filters'] = self.request.GET
         return ctx

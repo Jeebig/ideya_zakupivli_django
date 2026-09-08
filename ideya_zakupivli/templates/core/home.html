@@ -2,16 +2,21 @@
 замовників і учасників{% endblock %} {% block content %}
 <section class="hero">
   <div class="container hero-inner">
-    <p class="hero-eyebrow">Спокійно.</p>
-    <h1 class="hero-title">ІдеЯ <span>є</span>.</h1>
+    <p class="hero-eyebrow">І де я в цих закупівлях?</p>
+    <h1 class="hero-title">Спокійно. Іде<span>Я</span> є.</h1>
     <p class="hero-subtitle">
-      Коли тендерна документація незрозуміла, АМКУ чекає пояснення, а до
-      дедлайну 24 години — тут ви отримаєте чітку відповідь, а не купу
-      канцеляризмів.
+      Практичні рішення для замовників та учасників: коротка відповідь,
+      нормативна опора, алгоритм дій і готове формулювання.
     </p>
-    <a href="{% url 'consultations:contacts' %}" class="btn btn-cta btn-lg"
-      >Отримати консультацію</a
-    >
+    <form class="hero-search" action="{% url 'content:article_list' %}" method="get">
+      <label class="sr-only" for="hero-query">Що потрібно вирішити?</label>
+      <input id="hero-query" name="q" type="search" placeholder="Що потрібно вирішити?" />
+      <p>Наприклад: 24 години, зміна ціни, моніторинг ДАСУ…</p>
+      <div class="hero-actions">
+        <button type="submit" class="btn btn-accent btn-lg">Знайти відповідь</button>
+        <a href="{% url 'consultations:contacts' %}" class="btn btn-outline-light btn-lg">Описати ситуацію</a>
+      </div>
+    </form>
   </div>
 </section>
 
@@ -177,7 +182,7 @@
     <h2>Потрібна відповідь по вашій ситуації?</h2>
     <p>Опишіть ситуацію — отримаєте письмову консультацію по суті.</p>
     <a href="{% url 'consultations:contacts' %}" class="btn btn-cta btn-lg"
-      >Отримати консультацію</a
+      >Описати ситуацію</a
     >
   </div>
 </section>
