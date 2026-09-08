@@ -12,7 +12,9 @@
   <div class="container">
     <form class="catalog-filters" method="get">
       <input name="q" value="{{ filters.q|default:'' }}" placeholder="Назва, номер або ключове слово" />
-      <select name="tag"><option value="">Усі теми</option>{% for tag in tags %}<option value="{{ tag.slug }}">{{ tag.name }}</option>{% endfor %}</select>
+      <select name="tag"><option value="">Усі напрямки</option>{% for tag in tags %}<option value="{{ tag.slug }}" {% if filters.tag == tag.slug %}selected{% endif %}>{{ tag.name }}</option>{% endfor %}</select>
+      <select name="document_type"><option value="">Усі види документів</option>{% for value, label in document_types %}<option value="{{ value }}" {% if filters.document_type == value %}selected{% endif %}>{{ label }}</option>{% endfor %}</select>
+      <select name="status"><option value="">Усі статуси</option>{% for value, label in statuses %}<option value="{{ value }}" {% if filters.status == value %}selected{% endif %}>{{ label }}</option>{% endfor %}</select>
       <input name="year" inputmode="numeric" placeholder="Рік" />
       <input name="month" inputmode="numeric" placeholder="Місяць" />
       <label><input type="checkbox" name="current" value="1" {% if filters.current %}checked{% endif %} /> Актуальні</label>
@@ -21,12 +23,14 @@
     <div class="cards-grid cards-grid-3">
       {% for document in official_documents %}
       <article class="content-card official-card">
-        <div class="content-card-date">{{ document.document_date|date:"d.m.Y" }} · № {{ document.document_number }}</div>
+        <div class="content-card-date">{{ document.get_document_type_display }} · {{ document.document_date|date:"d.m.Y" }} · № {{ document.document_number }}</div>
         <h2>{{ document.title }}</h2>
+        <p><strong>Статус:</strong> {{ document.get_status_display }} · <strong>Перевірено:</strong> {{ document.checked_at|date:"d.m.Y" }}</p>
         <div class="tag-row">{% for tag in document.tags.all %}<span class="tag-chip">{{ tag.name }}</span>{% endfor %}</div>
         <p>{{ document.summary }}</p>
         <p class="official-source">Джерело: Міністерство економіки та довкілля України. Документ завантажується з офіційного вебсайту <strong>me.gov.ua</strong>.</p>
-        <div class="hero-actions"><a class="btn btn-secondary" target="_blank" rel="noopener" href="{{ document.source_page_url }}">Переглянути першоджерело</a><a class="btn btn-cta" target="_blank" rel="noopener" href="{{ document.source_file_url }}">Завантажити з me.gov.ua</a></div>
+        <div class="hero-actions"><a class="btn btn-secondary" target="_blank" rel="noopener" href="{{ document.current_text_url|default:document.source_file_url }}">Відкрити чинну редакцію</a><a class="btn btn-cta" target="_blank" rel="noopener" href="{{ document.source_page_url }}">Переглянути першоджерело</a></div>
+        {% if document.previous_text_url %}<p><a target="_blank" rel="noopener" href="{{ document.previous_text_url }}">{{ document.previous_revision_label|default:"Редакція попередня" }}</a></p>{% endif %}
         {% if document.practical_comment %}<a class="link-more" href="{{ document.practical_comment.get_absolute_url }}">Практичний коментар ІдеЯ</a>{% endif %}
       </article>
       {% empty %}<p>Офіційних документів за цими фільтрами поки не знайдено.</p>{% endfor %}

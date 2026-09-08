@@ -41,7 +41,7 @@ class FAQItemAdmin(admin.ModelAdmin):
 
 @admin.register(OfficialExplanation)
 class OfficialExplanationAdmin(admin.ModelAdmin):
-    list_display = ('document_date', 'document_number', 'title', 'is_current', 'checked_at')
-    list_filter = ('is_current', 'tags')
-    search_fields = ('title', 'document_number', 'summary')
+    list_display = ('document_date', 'document_number', 'title', 'document_type', 'status', 'checked_at')
+    list_filter = ('document_type', 'status', 'tags')
+    search_fields = ('title', 'document_number', 'summary', 'keywords')
     filter_horizontal = ('tags',)

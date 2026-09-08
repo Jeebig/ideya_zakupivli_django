@@ -221,12 +221,16 @@ class Command(BaseCommand):
         official, _ = OfficialExplanation.objects.update_or_create(
             document_number='№ 3304-04/12345-06',
             defaults=dict(
+                document_type=OfficialExplanation.RESOLUTION,
+                status=OfficialExplanation.CURRENT,
                 document_date=date(2025, 2, 14),
                 title='Щодо застосування Особливостей здійснення публічних закупівель',
                 summary='Демонстраційний запис офіційного роз’яснення: перевірте порядок застосування норм постанови № 1178 та актуальність позиції за першоджерелом.',
                 source_page_url='https://www.me.gov.ua/InfoRez/DocumentsList?lang=uk-UA',
                 source_file_url='https://www.me.gov.ua/InfoRez/DocumentsList?lang=uk-UA',
-                checked_at=timezone.now(),
+                current_text_url='https://zakon.rada.gov.ua/laws/show/1178-2022-%D0%BF#Text',
+                keywords='публічні закупівлі, постанова 1178, відкриті торги, замовник',
+                checked_at=date.today(),
                 is_current=True,
                 practical_comment=art1,
             ),

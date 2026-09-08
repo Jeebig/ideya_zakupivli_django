@@ -153,13 +153,24 @@ class OfficialExplanationListView(ListView):
         qs = OfficialExplanation.objects.all().prefetch_related('tags', 'practical_comment')
         query = self.request.GET.get('q', '').strip()
         tag = self.request.GET.get('tag')
+        document_type = self.request.GET.get('document_type')
+        status = self.request.GET.get('status')
         year = self.request.GET.get('year')
         month = self.request.GET.get('month')
         current = self.request.GET.get('current')
         if query:
-            qs = qs.filter(title__icontains=query) | qs.filter(document_number__icontains=query) | qs.filter(summary__icontains=query)
+            qs = qs.filter(
+                Q(title__icontains=query) |
+                Q(document_number__icontains=query) |
+                Q(summary__icontains=query) |
+                Q(keywords__icontains=query)
+            )
         if tag:
             qs = qs.filter(tags__slug=tag)
+        if document_type in dict(OfficialExplanation.DOCUMENT_TYPE_CHOICES):
+            qs = qs.filter(document_type=document_type)
+        if status in dict(OfficialExplanation.STATUS_CHOICES):
+            qs = qs.filter(status=status)
         if year and year.isdigit():
             qs = qs.filter(document_date__year=int(year))
         if month and month.isdigit():
@@ -171,5 +182,7 @@ class OfficialExplanationListView(ListView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['tags'] = Tag.objects.filter(official_explanations__isnull=False).distinct()
+        ctx['document_types'] = OfficialExplanation.DOCUMENT_TYPE_CHOICES
+        ctx['statuses'] = OfficialExplanation.STATUS_CHOICES
         ctx['filters'] = self.request.GET
         return ctx

@@ -2,6 +2,7 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.urls import reverse
 from django.utils.text import slugify
+from django.utils import timezone
 
 
 AUDIENCE_CHOICES = [
@@ -122,14 +123,40 @@ class FAQItem(models.Model):
 
 class OfficialExplanation(models.Model):
     """Посилання на офіційні документи Мінекономіки без копіювання файлів."""
+    LAW = 'law'
+    RESOLUTION = 'resolution'
+    ORDER = 'order'
+    PROCEDURE = 'procedure'
+    GUIDELINE = 'guideline'
+    DOCUMENT_TYPE_CHOICES = [
+        (LAW, 'Закон'),
+        (RESOLUTION, 'Постанова'),
+        (ORDER, 'Наказ'),
+        (PROCEDURE, 'Порядок'),
+        (GUIDELINE, 'Настанова'),
+    ]
+    CURRENT = 'current'
+    INVALID = 'invalid'
+    UPCOMING = 'upcoming'
+    STATUS_CHOICES = [
+        (CURRENT, 'Чинний'),
+        (INVALID, 'Втратив чинність'),
+        (UPCOMING, 'Набирає чинності'),
+    ]
+    document_type = models.CharField('Вид документа', max_length=20, choices=DOCUMENT_TYPE_CHOICES, default=RESOLUTION)
+    status = models.CharField('Статус', max_length=20, choices=STATUS_CHOICES, default=CURRENT)
     document_date = models.DateField('Дата документа')
     document_number = models.CharField('Номер документа', max_length=120)
     title = models.CharField('Офіційна назва', max_length=500)
     summary = models.TextField('Короткий опис')
+    keywords = models.TextField('Ключові слова', blank=True, help_text='Слова через кому')
     tags = models.ManyToManyField(Tag, blank=True, related_name='official_explanations', verbose_name='Теми')
     source_page_url = models.URLField('Посилання на картку документа')
-    source_file_url = models.URLField('Пряме посилання на файл')
-    checked_at = models.DateTimeField('Остання перевірка посилання', auto_now=True)
+    source_file_url = models.URLField('Офіційне посилання')
+    current_text_url = models.URLField('Посилання на чинний текст з #Text', blank=True)
+    previous_text_url = models.URLField('Посилання на попередню редакцію', blank=True)
+    previous_revision_label = models.CharField('Підпис попередньої редакції', max_length=255, blank=True)
+    checked_at = models.DateField('Перевірено', default=timezone.localdate)
     is_current = models.BooleanField('Актуальне', default=True)
     practical_comment = models.ForeignKey(
         Article, blank=True, null=True, on_delete=models.SET_NULL,
