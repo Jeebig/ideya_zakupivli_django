@@ -5,6 +5,7 @@
 <section class="page-header thanks-page">
   <div class="container">
     <h1>Дякуємо за звернення!</h1>
+    {% if request_number %}<p class="request-number">Номер звернення: <strong>{{ request_number }}</strong></p>{% endif %}
     <p class="page-header-sub">{{ site_settings.response_sla }}. Відповідь буде надіслана письмово на вказаний контакт.</p>
     <a href="{% url 'core:home' %}" class="btn btn-secondary">На головну</a>
   </div>

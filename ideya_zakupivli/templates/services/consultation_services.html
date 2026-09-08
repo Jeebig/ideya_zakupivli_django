@@ -17,11 +17,17 @@
         {% if s.description %}
         <p>{{ s.description }}</p>
         {% endif %}
+        {% if s.problem %}<p><strong>Вирішуємо:</strong> {{ s.problem }}</p>{% endif %}
+        {% if s.result_format %}<p><strong>Результат:</strong> {{ s.result_format }}</p>{% endif %}
+        {% if s.duration %}<p><strong>Строк:</strong> {{ s.duration }}</p>{% endif %}
+        {% if s.price %}<p><strong>Вартість:</strong> {{ s.price }}</p>{% endif %}
+        {% if s.urgent_available %}<p class="service-urgent">Можливе термінове виконання</p>{% endif %}
+        {% if s.not_included %}<p><strong>Не входить:</strong> {{ s.not_included }}</p>{% endif %}
         <p class="price-note">{{ s.format_note }}</p>
         <a
           href="{% url 'consultations:contacts' %}?topic={{ s.title|urlencode }}"
           class="btn btn-secondary"
-          >Дізнатись вартість</a
+          >{{ s.cta_label|default:"Описати ситуацію" }}</a
         >
       </div>
       {% empty %}

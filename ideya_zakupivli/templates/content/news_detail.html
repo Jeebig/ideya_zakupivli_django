@@ -20,7 +20,10 @@
 
 <section class="article-detail">
   <div class="container article-detail-grid">
-    <article class="article-body">{{ article.body|linebreaks }}</article>
+    <article class="article-body">
+      {% if article.changes_document or article.effective_from or article.what_to_do %}<div class="answer-block answer-block-2"><h2>Що змінилося</h2>{% if article.changes_document %}<p><strong>Документ змін:</strong> {{ article.changes_document }}</p>{% endif %}{% if article.effective_from %}<p><strong>Набрання чинності:</strong> {{ article.effective_from|date:"d.m.Y" }}</p>{% endif %}{% if article.what_to_do %}<p><strong>Що зробити:</strong> {{ article.what_to_do|linebreaks }}</p>{% endif %}</div>{% endif %}
+      {{ article.body|linebreaks }}
+    </article>
     <aside class="article-sidebar">
       {% if related_clarifications %}
       <div class="sidebar-block">

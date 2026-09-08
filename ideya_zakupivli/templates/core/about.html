@@ -1,23 +1,28 @@
 {% extends "base.html" %}
-{% block title %}Про мене — ІдеЯ у закупівлях{% endblock %}
+{% block title %}Команда ІдеЯ — ІдеЯ у закупівлях{% endblock %}
 
 {% block content %}
 <section class="page-header">
   <div class="container">
-    <h1>Про мене</h1>
+    <h1>{{ site_settings.expert_name|default:"Команда ІдеЯ" }}</h1>
     {% if site_settings.experience_years %}<p class="page-header-sub">Досвід: {{ site_settings.experience_years }}</p>{% endif %}
   </div>
 </section>
 
 <section class="about-intro">
   <div class="container">
+    {% if site_settings.expert_photo %}<img class="expert-photo" src="{{ site_settings.expert_photo.url }}" alt="{{ site_settings.expert_name }}" />{% endif %}
+    {% if site_settings.expert_specialization %}<h2>{{ site_settings.expert_specialization }}</h2>{% endif %}
     {% if site_settings.about_intro %}
       <p>{{ site_settings.about_intro|linebreaks }}</p>
     {% else %}
-      <p>Працюю з публічними закупівлями: допомагаю замовникам готувати документацію без ризику
-      подальших скарг, а учасникам — правильно готувати пропозиції та захищати свою позицію.
+      <p>Працюю з публічними закупівлями: допомагаю замовникам готувати документацію зі зменшенням ризику оскарження та зауважень контролюючих органів, а учасникам — правильно готувати пропозиції та захищати свою позицію.
       Без канцеляризмів, простою мовою, з опорою на практику.</p>
     {% endif %}
+    {% if site_settings.expert_education %}<div class="profile-block"><h3>Освіта та сертифікати</h3><p>{{ site_settings.expert_education|linebreaks }}</p></div>{% endif %}
+    {% if site_settings.expert_experience %}<div class="profile-block"><h3>Досвід і напрямки роботи</h3><p>{{ site_settings.expert_experience|linebreaks }}</p></div>{% endif %}
+    {% if site_settings.confidentiality_note %}<div class="profile-block"><h3>Конфіденційність</h3><p>{{ site_settings.confidentiality_note|linebreaks }}</p></div>{% endif %}
+    {% if site_settings.legal_provider_details %}<div class="profile-block"><h3>Реквізити надавача послуг</h3><p>{{ site_settings.legal_provider_details|linebreaks }}</p></div>{% endif %}
   </div>
 </section>
 
@@ -42,7 +47,7 @@
 <section class="cta-final">
   <div class="container cta-final-inner">
     <h2>Готові обговорити вашу ситуацію?</h2>
-    <a href="{% url 'consultations:contacts' %}" class="btn btn-cta btn-lg">Отримати консультацію</a>
+    <a href="{% url 'consultations:contacts' %}" class="btn btn-cta btn-lg">Описати ситуацію</a>
   </div>
 </section>
 {% endblock %}

@@ -9,6 +9,7 @@
       content="{% block meta_description %}Консультації, роз'яснення та супровід закупівель для замовників і учасників.{% endblock %}"
     />
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <link rel="icon" href="{% static 'icons/favicon.svg' %}" type="image/svg+xml" />
   </head>
   <body>
     <header class="site-header">
@@ -99,6 +100,9 @@
             <li><a href="{% url 'services:zamovnykam' %}">Замовникам</a></li>
             <li><a href="{% url 'services:uchasnykam' %}">Учасникам</a></li>
             <li><a href="{% url 'content:article_list' %}">База знань</a></li>
+            <li><a href="{% url 'core:privacy' %}">Конфіденційність</a></li>
+            <li><a href="{% url 'core:terms' %}">Умови користування</a></li>
+            <li><a href="{% url 'core:disclaimer' %}">Актуальність матеріалів</a></li>
           </ul>
         </div>
         <div class="footer-col">

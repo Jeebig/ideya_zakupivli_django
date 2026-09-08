@@ -19,6 +19,13 @@ class Service(models.Model):
     short_description = models.CharField('Короткий опис (для картки)', max_length=400, blank=True)
     whats_included = models.TextField('Що входить у послугу', blank=True, help_text='Кожен пункт з нового рядка')
     risks = models.TextField('Типові помилки / ризики', blank=True, help_text='Кожен пункт з нового рядка')
+    client_provides = models.TextField('Що надає клієнт', blank=True)
+    result_format = models.CharField('Формат результату', max_length=255, blank=True)
+    duration = models.CharField('Строк виконання', max_length=120, blank=True)
+    price = models.CharField('Вартість / від', max_length=120, blank=True)
+    urgent_available = models.BooleanField('Можливе термінове виконання', default=False)
+    not_included = models.TextField('Що не входить у послугу', blank=True)
+    cta_label = models.CharField('Текст кнопки', max_length=120, blank=True)
     tags = models.ManyToManyField(Tag, related_name='services', blank=True, verbose_name='Теми')
     order = models.PositiveIntegerField('Порядок', default=0)
 
@@ -63,6 +70,14 @@ class ConsultationService(models.Model):
         'Примітка про формат/ціну', max_length=255,
         default='Відповідь надається письмово. Вартість — за запитом.',
     )
+    problem = models.TextField('Яку проблему вирішуємо', blank=True)
+    client_provides = models.TextField('Що надає клієнт', blank=True)
+    result_format = models.CharField('Формат результату', max_length=255, blank=True)
+    duration = models.CharField('Строк', max_length=120, blank=True)
+    price = models.CharField('Вартість / від', max_length=120, blank=True)
+    urgent_available = models.BooleanField('Можливе термінове виконання', default=False)
+    not_included = models.TextField('Що не входить', blank=True)
+    cta_label = models.CharField('Текст кнопки', max_length=120, blank=True)
     order = models.PositiveIntegerField('Порядок', default=0)
 
     class Meta:

@@ -39,6 +39,15 @@
 <section class="service-detail">
   <div class="container service-detail-grid">
     <div class="service-detail-main">
+      {% if service.client_provides or service.result_format or service.not_included %}
+      <div class="detail-block service-facts">
+        <h2>Як це працює</h2>
+        {% if service.client_provides %}<p><strong>Що надає клієнт:</strong> {{ service.client_provides }}</p>{% endif %}
+        {% if service.result_format %}<p><strong>Формат результату:</strong> {{ service.result_format }}</p>{% endif %}
+        {% if service.not_included %}<p><strong>Не входить:</strong> {{ service.not_included }}</p>{% endif %}
+        {% if service.urgent_available %}<p class="service-urgent">Можливе термінове виконання</p>{% endif %}
+      </div>
+      {% endif %}
       {% if service.included_list %}
       <div class="detail-block">
         <h2>Що входить у послугу</h2>
@@ -89,7 +98,7 @@
         <a
           href="{% url 'consultations:contacts' %}?topic={{ service.title|urlencode }}"
           class="btn btn-cta"
-          >Замовити консультацію</a
+          >{{ service.cta_label|default:"Описати ситуацію" }}</a
         >
       </div>
     </aside>

@@ -7,7 +7,6 @@ from django.utils.text import slugify
 AUDIENCE_CHOICES = [
     ('zamovnykam', 'Замовникам'),
     ('uchasnykam', 'Учасникам'),
-    ('both', 'Усім'),
 ]
 
 
@@ -42,7 +41,7 @@ class Article(models.Model):
     article_type = models.CharField('Тип матеріалу', max_length=20, choices=TYPE_CHOICES, default=CLARIFICATION)
     title = models.CharField('Заголовок', max_length=255)
     slug = models.SlugField(max_length=280, unique=True, blank=True)
-    audience = models.CharField('Для кого', max_length=20, choices=AUDIENCE_CHOICES, default='both')
+    audience = models.CharField('Для кого', max_length=20, choices=AUDIENCE_CHOICES, default='zamovnykam')
     tags = models.ManyToManyField(Tag, related_name='articles', blank=True, verbose_name='Теми')
 
     summary = models.TextField('Короткий опис (для списків)', blank=True)
@@ -57,6 +56,10 @@ class Article(models.Model):
     action_algorithm = models.TextField('Алгоритм дій', blank=True)
     wording = models.TextField('Робоче формулювання', blank=True)
     author = models.CharField('Автор / експерт', max_length=255, blank=True)
+    template_url = models.URLField('Посилання на файл або шаблон', blank=True)
+    changes_document = models.CharField('Документ, яким внесено зміни', max_length=500, blank=True)
+    effective_from = models.DateField('Дата набрання чинності', null=True, blank=True)
+    what_to_do = models.TextField('Що потрібно зробити замовнику або учаснику', blank=True)
     related_articles = models.ManyToManyField(
         'self', blank=True, symmetrical=False, related_name='related_to', verbose_name='Пов’язані матеріали'
     )
@@ -91,7 +94,7 @@ class Article(models.Model):
 class FAQItem(models.Model):
     question = models.CharField('Питання', max_length=300)
     answer = models.TextField('Відповідь')
-    audience = models.CharField('Для кого', max_length=20, choices=AUDIENCE_CHOICES, default='both')
+    audience = models.CharField('Для кого', max_length=20, choices=AUDIENCE_CHOICES, default='zamovnykam')
     tags = models.ManyToManyField(Tag, related_name='faq_items', blank=True, verbose_name='Теми')
     related_article = models.ForeignKey(
         Article, on_delete=models.SET_NULL, null=True, blank=True,

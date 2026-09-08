@@ -13,6 +13,7 @@ class ConsultationRequest(models.Model):
     message = models.TextField('Опис ситуації')
     consent = models.BooleanField('Згода на обробку персональних даних', default=False)
     urgent = models.BooleanField('Терміново', default=False)
+    request_number = models.CharField('Номер звернення', max_length=30, unique=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     is_processed = models.BooleanField('Опрацьовано', default=False)
 
@@ -23,6 +24,12 @@ class ConsultationRequest(models.Model):
 
     def __str__(self):
         return f'{self.name} — {self.topic or "без теми"} ({self.created_at:%d.%m.%Y})'
+
+    def save(self, *args, **kwargs):
+        if not self.request_number:
+            from uuid import uuid4
+            self.request_number = f'IDEYA-{uuid4().hex[:8].upper()}'
+        super().save(*args, **kwargs)
 
 
 class ConsultationAttachment(models.Model):

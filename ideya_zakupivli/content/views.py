@@ -22,7 +22,7 @@ class ArticleListView(ListView):
         if tag_slug:
             qs = qs.filter(tags__slug=tag_slug)
         if audience in ('zamovnykam', 'uchasnykam'):
-            qs = qs.filter(audience__in=[audience, 'both'])
+            qs = qs.filter(audience=audience)
         if query:
             q = query.strip()
             qs = qs.filter(
@@ -132,7 +132,7 @@ class FAQListView(ListView):
         if tag_slug:
             qs = qs.filter(tags__slug=tag_slug)
         if audience in ('zamovnykam', 'uchasnykam'):
-            qs = qs.filter(audience__in=[audience, 'both'])
+            qs = qs.filter(audience=audience)
         return qs.distinct()
 
     def get_context_data(self, **kwargs):

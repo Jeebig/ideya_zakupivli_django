@@ -1,4 +1,6 @@
 from django.shortcuts import redirect
+from django.http import HttpResponse
+from django.shortcuts import render
 from django.contrib import messages
 from django.views.generic import TemplateView
 from django.views.decorators.http import require_POST
@@ -42,6 +44,46 @@ class AboutView(TemplateView):
         ctx = super().get_context_data(**kwargs)
         ctx['cases'] = CaseStudy.objects.all()
         return ctx
+
+
+class LegalPageView(TemplateView):
+    page_templates = {
+        'privacy': 'core/privacy.html',
+        'terms': 'core/terms.html',
+        'services_terms': 'core/services_terms.html',
+        'documents': 'core/documents.html',
+        'disclaimer': 'core/disclaimer.html',
+    }
+
+    def get_template_names(self):
+        return [self.page_templates[self.kwargs['page']]]
+
+
+def robots_txt(request):
+    return HttpResponse(
+        'User-agent: *\nDisallow: /admin/\nDisallow: /media/\nSitemap: /sitemap.xml\n',
+        content_type='text/plain',
+    )
+
+
+def sitemap_xml(request):
+    from django.urls import reverse
+    urls = [
+        reverse('core:home'), reverse('core:about'), reverse('services:poslugy'),
+        reverse('content:article_list'), reverse('content:faq_list'),
+        reverse('content:official_list'), reverse('consultations:contacts'),
+        reverse('core:privacy'), reverse('core:terms'), reverse('core:services_terms'),
+        reverse('core:documents'), reverse('core:disclaimer'),
+    ]
+    body = ''.join(f'<url><loc>{request.build_absolute_uri(url)}</loc></url>' for url in urls)
+    return HttpResponse(
+        f'<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{body}</urlset>',
+        content_type='application/xml',
+    )
+
+
+def page_not_found(request, exception):
+    return render(request, '404.html', status=404)
 
 
 @require_POST

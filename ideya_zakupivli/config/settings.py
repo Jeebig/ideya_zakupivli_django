@@ -110,4 +110,7 @@ SECURE_HSTS_SECONDS = int(
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+ADMIN_NOTIFICATION_EMAIL = os.environ.get('ADMIN_NOTIFICATION_EMAIL', '')
+DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL', 'noreply@ideya-zakupivli.ua')
+
 LOGIN_URL = 'admin:login'

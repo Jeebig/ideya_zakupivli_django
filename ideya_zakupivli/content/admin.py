@@ -21,10 +21,10 @@ class ArticleAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {'fields': ('article_type', 'title', 'slug', 'audience', 'tags', 'summary')}),
         ("Структура роз'яснення (4 кроки)", {
-            'fields': ('short_answer', 'legal_basis', 'legal_basis_reference', 'source_url', 'current_as_of', 'exceptions_risks', 'action_algorithm', 'wording', 'author', 'related_articles'),
+            'fields': ('short_answer', 'legal_basis', 'legal_basis_reference', 'source_url', 'current_as_of', 'exceptions_risks', 'action_algorithm', 'wording', 'template_url', 'author', 'related_articles'),
             'classes': ('collapse',),
         }),
-        ('Текст новини', {'fields': ('body',), 'classes': ('collapse',)}),
+        ('Текст новини', {'fields': ('body', 'changes_document', 'effective_from', 'what_to_do'), 'classes': ('collapse',)}),
         ('Публікація', {'fields': ('is_published', 'is_featured', 'published_at', 'updated_at')}),
     )
     readonly_fields = ('updated_at',)

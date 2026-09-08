@@ -52,6 +52,7 @@
       {% endif %}
       {% if article.exceptions_risks %}<div class="answer-block answer-block-risk"><h2>Винятки та ризики</h2><p>{{ article.exceptions_risks|linebreaks }}</p></div>{% endif %}
       {% if article.wording %}<div class="article-actions"><button class="btn btn-cta" type="button" data-copy-target="wording">Скопіювати формулювання</button><button class="btn btn-secondary" type="button" onclick="window.print()">Роздрукувати / PDF</button></div><textarea id="wording" class="sr-only">{{ article.wording }}</textarea>{% endif %}
+      {% if article.template_url %}<div class="article-actions"><a class="btn btn-secondary" href="{{ article.template_url }}" target="_blank" rel="noopener">Завантажити шаблон</a></div>{% endif %}
       {% if article.author %}<p class="article-byline">Автор / експерт: {{ article.author }}</p>{% endif %}
     </article>
 

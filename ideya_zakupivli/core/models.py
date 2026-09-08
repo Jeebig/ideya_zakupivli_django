@@ -38,6 +38,13 @@ class SiteSettings(models.Model):
     )
     about_intro = models.TextField('Вступний текст "Про мене"', blank=True)
     experience_years = models.CharField('Досвід (наприклад "7+ років")', max_length=100, blank=True)
+    expert_name = models.CharField('Ім’я та прізвище експерта', max_length=255, blank=True)
+    expert_specialization = models.CharField('Спеціалізація', max_length=255, blank=True)
+    expert_education = models.TextField('Освіта та сертифікати', blank=True)
+    expert_experience = models.TextField('Фактичний досвід', blank=True)
+    confidentiality_note = models.TextField('Принцип конфіденційності', blank=True)
+    legal_provider_details = models.TextField('Реквізити надавача платних послуг', blank=True)
+    expert_photo = models.ImageField('Фото експерта', upload_to='expert/', blank=True, null=True)
 
     class Meta:
         verbose_name = 'Налаштування сайту'
