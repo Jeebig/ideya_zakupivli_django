@@ -3,9 +3,11 @@ from django.db import models
 
 class ConsultationRequest(models.Model):
     AUDIENCE_CHOICES = [('zamovnyk', 'Я — замовник'), ('uchasnyk', 'Я — учасник')]
+    RESPONSE_CHOICES = [('email', 'Email'), ('phone', 'Телефон'), ('telegram', 'Telegram'), ('viber', 'Viber')]
     name = models.CharField("Ім'я", max_length=150)
     audience = models.CharField('Аудиторія', max_length=20, choices=AUDIENCE_CHOICES, default='zamovnyk')
     contact = models.CharField('Контакт (email/телефон/telegram)', max_length=200)
+    response_method = models.CharField('Зручний спосіб відповіді', max_length=20, choices=RESPONSE_CHOICES, default='email')
     help_type = models.CharField('Вид допомоги', max_length=200, blank=True)
     deadline = models.DateField('Крайній строк', null=True, blank=True)
     topic = models.CharField('Тема звернення', max_length=255, blank=True)

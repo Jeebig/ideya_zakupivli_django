@@ -6,8 +6,7 @@
   <div class="container">
     <p class="breadcrumbs">
       <a href="{% url 'core:home' %}">Головна</a> /
-      <a href="{% url 'content:article_list' %}">Роз'яснення</a> / {{
-      article.title }}
+      <a href="{% url 'content:article_list' %}">Роз'яснення</a> / {{ article.title }}
     </p>
     <h1>{{ article.title }}</h1>
     <p class="page-header-meta">

@@ -1079,6 +1079,13 @@ section {
   font-size: 0.82rem;
   margin: 4px 0 0;
 }
+.honeypot-field {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
 
 .thanks-page {
   text-align: center;

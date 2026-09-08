@@ -1,7 +1,9 @@
 from django.views.generic import FormView, TemplateView
+from django.shortcuts import redirect
 from django.urls import reverse, reverse_lazy
 from django.conf import settings
 from django.core.mail import send_mail
+from django.db import transaction
 from .forms import ConsultationRequestForm
 from .models import ConsultationAttachment
 
@@ -19,13 +21,15 @@ class ContactsView(FormView):
         return initial
 
     def form_valid(self, form):
-        request_obj = form.save()
-        for uploaded in form.cleaned_data.get('attachments', []):
-            ConsultationAttachment.objects.create(request=request_obj, file=uploaded)
+        with transaction.atomic():
+            request_obj = form.save()
+            for uploaded in form.cleaned_data.get('attachments', []):
+                ConsultationAttachment.objects.create(request=request_obj, file=uploaded)
         if settings.ADMIN_NOTIFICATION_EMAIL:
+            attachments = request_obj.attachments.count()
             send_mail(
                 f'Нове звернення {request_obj.request_number}',
-                f'Ім’я: {request_obj.name}\nКонтакт: {request_obj.contact}\nОпис: {request_obj.message}',
+                f'Ім’я: {request_obj.name}\nКонтакт: {request_obj.contact}\nСпосіб відповіді: {request_obj.get_response_method_display()}\nТерміново: {"так" if request_obj.urgent else "ні"}\nВкладень: {attachments}\nОпис: {request_obj.message}',
                 settings.DEFAULT_FROM_EMAIL,
                 [settings.ADMIN_NOTIFICATION_EMAIL],
                 fail_silently=True,
