@@ -71,7 +71,7 @@ def sitemap_xml(request):
     urls = [
         reverse('core:home'), reverse('core:about'), reverse('services:poslugy'),
         reverse('content:article_list'), reverse('content:faq_list'),
-        reverse('content:official_list'), reverse('consultations:contacts'),
+        reverse('content:official_list'), reverse('content:normative_list'), reverse('consultations:contacts'),
         reverse('core:privacy'), reverse('core:terms'), reverse('core:services_terms'),
         reverse('core:documents'), reverse('core:disclaimer'),
     ]

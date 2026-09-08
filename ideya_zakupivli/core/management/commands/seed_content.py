@@ -3,7 +3,7 @@ from django.utils.text import slugify
 from django.utils import timezone
 from datetime import date
 
-from content.models import Tag, Article, FAQItem, OfficialExplanation
+from content.models import Tag, Article, FAQItem, OfficialExplanation, NormativeAct
 from services.models import Service, ConsultationService
 from core.models import SiteSettings, CaseStudy
 
@@ -237,6 +237,22 @@ class Command(BaseCommand):
         )
         official.tags.set([tags['Відкриті торги з особливостями'], tags['Моніторинг ДАСУ']])
         self.stdout.write(self.style.SUCCESS('Офіційні роз’яснення Мінекономіки створено/оновлено.'))
+
+        normative, _ = NormativeAct.objects.update_or_create(
+            document_number='№ 1178',
+            defaults=dict(
+                document_type=NormativeAct.RESOLUTION,
+                status=NormativeAct.CURRENT,
+                document_date=date(2022, 10, 12),
+                title='Про затвердження Особливостей здійснення публічних закупівель',
+                summary='Ключовий нормативно-правовий акт для проведення публічних закупівель в умовах воєнного стану.',
+                keywords='публічні закупівлі, відкриті торги, воєнний стан, замовник, учасник',
+                current_text_url='https://zakon.rada.gov.ua/laws/show/1178-2022-%D0%BF#Text',
+                checked_at=date.today(),
+            ),
+        )
+        normative.tags.set([tags['Відкриті торги з особливостями'], tags['Закупівлі за пунктом 13 Постанови №1178']])
+        self.stdout.write(self.style.SUCCESS('Нормативно-правові акти створено/оновлено.'))
 
         news1, _ = Article.objects.get_or_create(
             slug='zminy-postanova-1178',

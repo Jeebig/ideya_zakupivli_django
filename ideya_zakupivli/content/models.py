@@ -171,3 +171,32 @@ class OfficialExplanation(models.Model):
 
     def __str__(self):
         return f'{self.document_number} — {self.title}'
+
+
+class NormativeAct(models.Model):
+    """Закони та підзаконні нормативно-правові акти."""
+    RESOLUTION = OfficialExplanation.RESOLUTION
+    CURRENT = OfficialExplanation.CURRENT
+    DOCUMENT_TYPE_CHOICES = OfficialExplanation.DOCUMENT_TYPE_CHOICES
+    STATUS_CHOICES = OfficialExplanation.STATUS_CHOICES
+
+    document_type = models.CharField('Вид документа', max_length=20, choices=DOCUMENT_TYPE_CHOICES, default=OfficialExplanation.RESOLUTION)
+    status = models.CharField('Статус', max_length=20, choices=STATUS_CHOICES, default=OfficialExplanation.CURRENT)
+    document_date = models.DateField('Дата документа')
+    document_number = models.CharField('Номер документа', max_length=120)
+    title = models.CharField('Офіційна назва', max_length=500)
+    summary = models.TextField('Короткий опис')
+    keywords = models.TextField('Ключові слова', blank=True, help_text='Слова через кому')
+    tags = models.ManyToManyField(Tag, blank=True, related_name='normative_acts', verbose_name='Напрями')
+    current_text_url = models.URLField('Посилання на чинний текст з #Text')
+    previous_text_url = models.URLField('Посилання на попередню редакцію', blank=True)
+    previous_revision_label = models.CharField('Підпис попередньої редакції', max_length=255, blank=True)
+    checked_at = models.DateField('Перевірено', default=timezone.localdate)
+
+    class Meta:
+        ordering = ['-document_date', '-id']
+        verbose_name = 'Нормативно-правовий акт'
+        verbose_name_plural = 'Нормативно-правові акти'
+
+    def __str__(self):
+        return f'{self.document_number} — {self.title}'

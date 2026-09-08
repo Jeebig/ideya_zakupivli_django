@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Tag, Article, FAQItem, OfficialExplanation
+from .models import Tag, Article, FAQItem, OfficialExplanation, NormativeAct
 
 
 @admin.register(Tag)
@@ -41,6 +41,14 @@ class FAQItemAdmin(admin.ModelAdmin):
 
 @admin.register(OfficialExplanation)
 class OfficialExplanationAdmin(admin.ModelAdmin):
+    list_display = ('document_date', 'document_number', 'title', 'document_type', 'status', 'checked_at')
+    list_filter = ('document_type', 'status', 'tags')
+    search_fields = ('title', 'document_number', 'summary', 'keywords')
+    filter_horizontal = ('tags',)
+
+
+@admin.register(NormativeAct)
+class NormativeActAdmin(admin.ModelAdmin):
     list_display = ('document_date', 'document_number', 'title', 'document_type', 'status', 'checked_at')
     list_filter = ('document_type', 'status', 'tags')
     search_fields = ('title', 'document_number', 'summary', 'keywords')

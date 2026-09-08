@@ -1,5 +1,5 @@
 from django.views.generic import ListView, DetailView
-from .models import Article, Tag, FAQItem, OfficialExplanation
+from .models import Article, Tag, FAQItem, OfficialExplanation, NormativeAct
 from django.db.models import Q
 from django.utils import timezone
 
@@ -184,5 +184,36 @@ class OfficialExplanationListView(ListView):
         ctx['tags'] = Tag.objects.filter(official_explanations__isnull=False).distinct()
         ctx['document_types'] = OfficialExplanation.DOCUMENT_TYPE_CHOICES
         ctx['statuses'] = OfficialExplanation.STATUS_CHOICES
+        ctx['filters'] = self.request.GET
+        return ctx
+
+
+class NormativeActListView(ListView):
+    model = NormativeAct
+    template_name = 'content/normative_list.html'
+    context_object_name = 'normative_acts'
+    paginate_by = 12
+
+    def get_queryset(self):
+        qs = NormativeAct.objects.all().prefetch_related('tags')
+        query = self.request.GET.get('q', '').strip()
+        tag = self.request.GET.get('tag')
+        document_type = self.request.GET.get('document_type')
+        status = self.request.GET.get('status')
+        if query:
+            qs = qs.filter(Q(title__icontains=query) | Q(document_number__icontains=query) | Q(summary__icontains=query) | Q(keywords__icontains=query))
+        if tag:
+            qs = qs.filter(tags__slug=tag)
+        if document_type in dict(NormativeAct.DOCUMENT_TYPE_CHOICES):
+            qs = qs.filter(document_type=document_type)
+        if status in dict(NormativeAct.STATUS_CHOICES):
+            qs = qs.filter(status=status)
+        return qs.distinct()
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['tags'] = Tag.objects.filter(normative_acts__isnull=False).distinct()
+        ctx['document_types'] = NormativeAct.DOCUMENT_TYPE_CHOICES
+        ctx['statuses'] = NormativeAct.STATUS_CHOICES
         ctx['filters'] = self.request.GET
         return ctx
