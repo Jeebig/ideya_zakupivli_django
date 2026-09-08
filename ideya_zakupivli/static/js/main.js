@@ -16,11 +16,15 @@ document.addEventListener("DOMContentLoaded", function () {
     button.addEventListener("click", function () {
       var target = document.getElementById(button.dataset.copyTarget);
       if (!target) return;
-      navigator.clipboard.writeText(target.value || target.textContent).then(function () {
-        var original = button.textContent;
-        button.textContent = "Скопійовано";
-        setTimeout(function () { button.textContent = original; }, 1600);
-      });
+      navigator.clipboard
+        .writeText(target.value || target.textContent)
+        .then(function () {
+          var original = button.textContent;
+          button.textContent = "Скопійовано";
+          setTimeout(function () {
+            button.textContent = original;
+          }, 1600);
+        });
     });
   });
 
